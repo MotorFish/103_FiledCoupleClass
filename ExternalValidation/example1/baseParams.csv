@@ -1,0 +1,9 @@
+﻿Udc,540
+Imax,300
+connectType,'Y'
+modulationType,'SVPWM'
+polePairs,4
+Lsigma,1.50E-05
+Rs,0.02
+Tem_target,1.0
+We_target,1.0

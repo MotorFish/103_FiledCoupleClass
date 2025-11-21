@@ -1,14 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PMSM场路耦合计算器使用示例
+PMSM场路耦合计算器使用示例 - 从外部CSV文件加载参数
 
-本示例展示了如何使用PMSMFieldCoupledCalculator进行基本计算。
+本示例展示了如何从外部CSV文件读取电机参数，创建PMSMFieldCoupledCalculator实例，
+并运行完整的测试套件。
+
+文件结构：
+    测试文件夹/
+    ├── baseParams.csv  - 基本参数（Udc, Imax, connectType等）
+    ├── psid.csv       - d轴总磁链-id曲线
+    ├── ld.csv         - d轴电感-id曲线
+    └── lq.csv         - q轴电感-iq曲线
+
+使用方法：
+    # 使用默认测试文件夹
+    python example_usage.py
+    
+    # 指定测试文件夹
+    python example_usage.py --folder ../ExternalValidation/example2
 """
 
+import os
+import sys
+import argparse
 import numpy as np
 import logging
-from pmsm_fcc_calculator import PMSMFieldCoupledCalculator
 
 # 配置日志
 logging.basicConfig(
@@ -18,167 +35,284 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main():
-    """主函数"""
+def read_base_params(csv_path: str) -> dict:
+    """
+    读取基本参数CSV文件
+    
+    文件格式：
+        Udc,540
+        Imax,300
+        connectType,'Y'
+        modulationType,'SVPWM'
+        polePairs,4
+        Lsigma,1.50E-05
+        Rs,0.02
+    
+    Args:
+        csv_path: baseParams.csv文件路径
+    
+    Returns:
+        包含基本参数的字典
+    """
+    logger.info(f"读取基本参数文件: {csv_path}")
+    
+    params = {}
+    
+    with open(csv_path, 'r', encoding='utf-8-sig') as f:  # utf-8-sig 自动处理BOM
+        for line in f:
+            line = line.strip()
+            if not line:  # 跳过空行
+                continue
+            
+            # 分割键值对
+            parts = line.split(',')
+            if len(parts) < 2:
+                continue
+            
+            key = parts[0].strip()
+            value = ','.join(parts[1:]).strip()  # 处理可能含逗号的值
+            
+            # 处理不同类型的值
+            if key in ['connectType', 'modulationType']:
+                # 字符串类型，去掉单引号
+                value = value.strip("'\"")
+            elif key in ['polePairs']:
+                # 整数类型
+                value = int(value)
+            else:
+                # 浮点数类型（支持科学计数法）
+                value = float(value)
+            
+            params[key] = value
+    
+    logger.info(f"✓ 基本参数读取完成，共{len(params)}个参数")
+    for key, value in params.items():
+        logger.info(f"  {key} = {value}")
+    
+    return params
+
+
+def read_lookup_table(csv_path: str) -> np.ndarray:
+    """
+    读取查表数据CSV文件
+    
+    文件格式（跳过前4行标题）：
+        直轴磁链(Psid)曲线
+        Psid(Iq=0)
+        true
+        直轴电流Id[amp],直轴磁链Psid[weber]
+        -3.227180004119873,0.34487593173980713
+        -3.0120346546173096,0.3605777323246002
+        ...
+    
+    Args:
+        csv_path: 查表数据CSV文件路径
+    
+    Returns:
+        N×2 的numpy数组，第1列为自变量，第2列为因变量
+    """
+    logger.info(f"读取查表文件: {csv_path}")
+    
+    data = []
+    with open(csv_path, 'r', encoding='utf-8-sig') as f:  # utf-8-sig 自动处理BOM
+        # 跳过前4行标题
+        for _ in range(4):
+            next(f)
+        
+        # 读取数据行
+        for line in f:
+            line = line.strip()
+            if not line:  # 跳过空行
+                continue
+            
+            # 分割并转换为浮点数
+            parts = line.split(',')
+            if len(parts) >= 2:
+                try:
+                    x = float(parts[0])
+                    y = float(parts[1])
+                    data.append([x, y])
+                except ValueError:
+                    logger.warning(f"跳过无效数据行: {line}")
+                    continue
+    
+    result = np.array(data)
+    logger.info(f"✓ 查表数据读取完成，共{len(result)}个数据点")
+    logger.info(f"  自变量范围: [{result[0, 0]:.2f}, {result[-1, 0]:.2f}]")
+    logger.info(f"  因变量范围: [{result[:, 1].min():.6f}, {result[:, 1].max():.6f}]")
+    
+    return result
+
+
+def main(test_folder_path: str = None):
+    """
+    主函数：从外部CSV文件加载参数并运行测试
+    
+    Args:
+        test_folder_path: 测试文件夹路径，如果为None则使用默认路径
+    """
     logger.info("="*70)
-    logger.info("PMSM场路耦合计算器使用示例")
+    logger.info("PMSM场路耦合计算器 - 外部数据加载示例")
     logger.info("="*70)
     
-    # ========================================
-    # 步骤1: 准备电机参数
-    # ========================================
-    logger.info("\n步骤1: 准备电机参数")
+    # 1. 确定测试文件夹路径
+    if test_folder_path is None:
+        # 默认路径：相对于当前脚本的位置
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        test_folder_path = os.path.join(script_dir, "..", "ExternalValidation", "example1")
     
-    # 生成电流范围
-    id_range = np.linspace(-300, 100, 61)
-    iq_range = np.linspace(-300, 300, 71)
+    test_folder_path = os.path.abspath(test_folder_path)
+    logger.info(f"\n测试文件夹: {test_folder_path}")
     
-    # 磁链-id特性（二次函数近似）
-    PsiR_vs_id = np.column_stack([
-        id_range,
-        1.0 - 2.0e-4 * id_range - 2.5e-7 * id_range**2
-    ])
+    # 检查文件夹是否存在
+    if not os.path.exists(test_folder_path):
+        logger.error(f"测试文件夹不存在: {test_folder_path}")
+        return False
     
-    # d轴电感-id特性
-    id0 = -133.33
-    Ld0 = 0.006
-    a = -1.5e-8
-    Lad_vs_id = np.column_stack([
-        id_range,
-        Ld0 + a * (id_range - id0) ** 2
-    ])
-    
-    # q轴电感-iq特性
-    Laq_vs_iq = np.column_stack([
-        iq_range,
-        9e-3 - 8.0e-9 * iq_range**2
-    ])
-    
-    logger.info("✓ 电机参数准备完成")
-    
-    # ========================================
-    # 步骤2: 创建计算器实例
-    # ========================================
-    logger.info("\n步骤2: 创建计算器实例")
-    
-    calculator = PMSMFieldCoupledCalculator(
-        PsiR_vs_id=PsiR_vs_id,
-        Lad_vs_id=Lad_vs_id,
-        Laq_vs_iq=Laq_vs_iq,
-        Udc=540.0,              # 母线电压 [V]
-        Imax=300.0,             # 限幅电流 [A]
-        connectType='Y',        # Y型连接
-        modulationType='SVPWM', # SVPWM调制
-        polePairs=4,            # 4对极
-        Lsigma=0.015e-3,        # 漏抗 [H]
-        Rs=0.02,                # 相电阻 [Ω]
-        We_base=100.0           # 基速 [rad/s]
-    )
-    
-    logger.info(f"✓ 计算器创建成功")
-    logger.info(f"  - UPmax = {calculator.UPmax:.2f} V")
-    logger.info(f"  - IPmax = {calculator.IPmax:.2f} A")
-    logger.info(f"  - 是否退磁 = {calculator.isDemag}")
-    if calculator.isDemag:
-        logger.info(f"  - 去磁电流 = {calculator.id_demag:.2f} A")
-    
-    # ========================================
-    # 步骤3: 计算MTPA轨迹
-    # ========================================
-    logger.info("\n步骤3: 计算MTPA控制轨迹")
-    
-    mtpa_track = calculator.calc_mtpa_track()
-    
-    logger.info(f"✓ MTPA轨迹计算完成")
-    logger.info(f"  - 轨迹点数: {len(mtpa_track)}")
-    logger.info(f"  - 最大转矩: {mtpa_track[-1, 3]:.2f} N·m")
-    logger.info(f"  - 最大电流: {mtpa_track[-1, 2]:.2f} A")
-    logger.info(f"  - 基速转速: {mtpa_track[-1, 4]:.2f} rad/s")
-    
-    # ========================================
-    # 步骤4: 生成非弱磁控制结果
-    # ========================================
-    logger.info("\n步骤4: 生成非弱磁控制结果（恒转矩负载）")
-    
-    temTarget = 500.0  # 目标转矩 [N·m]
-    weTarget = 200.0   # 目标转速 [rad/s]
-    
-    result = calculator.generate_non_fw_result(
-        controlType='mtpa',
-        temTarget=temTarget,
-        weTarget=weTarget,
-        loadType='constTem'
-    )
-    
-    logger.info(f"✓ 非弱磁控制结果生成完成")
-    logger.info(f"  - 电流范围点数: {len(result['IsRange'])}")
-    logger.info(f"  - 最大容量轨迹点数: {len(result['IsTrackAtMaxCapacity'])}")
-    logger.info(f"  - 恒转矩轨迹点数: {len(result['equTemTrack'])}")
-    logger.info(f"  - 恒转速轨迹点数: {len(result['equWeTrack'])}")
-    
-    givenPoint = result['givenPoint']
-    logger.info(f"\n  工况点参数:")
-    logger.info(f"  - iq = {givenPoint[0]:.2f} A")
-    logger.info(f"  - id = {givenPoint[1]:.2f} A")
-    logger.info(f"  - Tem = {givenPoint[2]:.2f} N·m (目标: {temTarget:.2f} N·m)")
-    logger.info(f"  - We = {givenPoint[3]:.2f} rad/s (目标: {weTarget:.2f} rad/s)")
-    
-    # 验证计算结果
-    Tem_calc = calculator._calc_Tem(givenPoint[1], givenPoint[0])
-    Up_calc = calculator._calc_Up(givenPoint[1], givenPoint[0], givenPoint[3])
-    logger.info(f"\n  验证计算:")
-    logger.info(f"  - 转矩校验: {Tem_calc:.2f} N·m")
-    logger.info(f"  - 电压校验: {Up_calc:.2f} V (限值: {calculator.UPmax:.2f} V)")
-    
-    # ========================================
-    # 步骤5: 生成弱磁控制结果（如果适用）
-    # ========================================
-    if calculator.isDemag:
-        logger.info("\n步骤5: 生成弱磁控制结果（恒转速负载）")
-        
-        temTarget_fw = 300.0  # 目标转矩 [N·m]
-        weTarget_fw = 500.0   # 目标转速 [rad/s]（高速）
-        
-        fw_result = calculator.generate_fw_result(
-            controlType='mtpa',
-            temTarget=temTarget_fw,
-            weTarget=weTarget_fw,
-            loadType='constWe'
-        )
-        
-        logger.info(f"✓ 弱磁控制结果生成完成")
-        logger.info(f"  - 电流范围点数: {len(fw_result['IsRange'])}")
-        logger.info(f"  - 最大容量轨迹点数: {len(fw_result['IsTrackAtMaxCapacity'])}")
-        
-        fw_givenPoint = fw_result['givenPoint']
-        logger.info(f"\n  弱磁工况点参数:")
-        logger.info(f"  - iq = {fw_givenPoint[0]:.2f} A")
-        logger.info(f"  - id = {fw_givenPoint[1]:.2f} A")
-        logger.info(f"  - Tem = {fw_givenPoint[2]:.2f} N·m (目标: {temTarget_fw:.2f} N·m)")
-        logger.info(f"  - We = {fw_givenPoint[3]:.2f} rad/s (目标: {weTarget_fw:.2f} rad/s)")
-        
-        # 验证弱磁计算结果
-        Tem_fw_calc = calculator._calc_Tem(fw_givenPoint[1], fw_givenPoint[0])
-        Up_fw_calc = calculator._calc_Up(fw_givenPoint[1], fw_givenPoint[0], fw_givenPoint[3])
-        logger.info(f"\n  弱磁验证计算:")
-        logger.info(f"  - 转矩校验: {Tem_fw_calc:.2f} N·m")
-        logger.info(f"  - 电压校验: {Up_fw_calc:.2f} V (限值: {calculator.UPmax:.2f} V)")
-    else:
-        logger.info("\n步骤5: 未发生完全退磁，跳过弱磁控制")
-    
-    # ========================================
-    # 总结
-    # ========================================
+    # 2. 读取基本参数
     logger.info("\n" + "="*70)
-    logger.info("示例运行完成！")
+    logger.info("步骤1: 读取基本参数")
     logger.info("="*70)
-    logger.info("\n要运行完整测试和生成可视化图表，请执行:")
-    logger.info("  python test_pmsm_fcc.py")
-    logger.info("\n要查看详细文档，请查看:")
-    logger.info("  README.md")
+    
+    base_params_path = os.path.join(test_folder_path, "baseParams.csv")
+    if not os.path.exists(base_params_path):
+        logger.error(f"baseParams.csv文件不存在: {base_params_path}")
+        return False
+    
+    base_params = read_base_params(base_params_path)
+    
+    # 3. 读取查表数据
+    logger.info("\n" + "="*70)
+    logger.info("步骤2: 读取查表数据")
     logger.info("="*70)
+    
+    # 读取 psid.csv
+    psid_path = os.path.join(test_folder_path, "psid.csv")
+    if not os.path.exists(psid_path):
+        logger.error(f"psid.csv文件不存在: {psid_path}")
+        return False
+    PsiD_vs_id = read_lookup_table(psid_path)
+    
+    # 读取 ld.csv
+    ld_path = os.path.join(test_folder_path, "ld.csv")
+    if not os.path.exists(ld_path):
+        logger.error(f"ld.csv文件不存在: {ld_path}")
+        return False
+    Lad_vs_id = read_lookup_table(ld_path)
+    
+    # 读取 lq.csv
+    lq_path = os.path.join(test_folder_path, "lq.csv")
+    if not os.path.exists(lq_path):
+        logger.error(f"lq.csv文件不存在: {lq_path}")
+        return False
+    Laq_vs_iq = read_lookup_table(lq_path)
+    
+    # 4. 组装参数字典
+    logger.info("\n" + "="*70)
+    logger.info("步骤3: 组装参数")
+    logger.info("="*70)
+    
+    params = {
+        'PsiD_vs_id': PsiD_vs_id,  # 注意：传入PsiD，不是PsiR
+        'Lad_vs_id': Lad_vs_id,
+        'Laq_vs_iq': Laq_vs_iq,
+        **base_params  # 展开基本参数
+    }
+    
+    logger.info(f"✓ 参数组装完成")
+    logger.info(f"  PsiD_vs_id: {PsiD_vs_id.shape}")
+    logger.info(f"  Lad_vs_id: {Lad_vs_id.shape}")
+    logger.info(f"  Laq_vs_iq: {Laq_vs_iq.shape}")
+    
+    # 5. 创建输出目录（在测试文件夹下）
+    logger.info("\n" + "="*70)
+    logger.info("步骤4: 创建输出目录")
+    logger.info("="*70)
+    
+    output_dir = os.path.join(test_folder_path, "test_results")
+    logger.info(f"输出目录: {output_dir}")
+    
+    # 6. 导入并配置测试模块
+    logger.info("\n" + "="*70)
+    logger.info("步骤5: 配置测试模块")
+    logger.info("="*70)
+    
+    # 动态导入test_pmsm_fcc
+    import test_pmsm_fcc
+    
+    # 设置输出目录
+    test_pmsm_fcc.setup_output_directory(output_dir)
+    logger.info(f"✓ 测试输出目录设置为: {test_pmsm_fcc.OUTPUT_DIR}")
+    
+    # 重新配置日志（输出到新目录）
+    test_pmsm_fcc.setup_logging(output_dir)
+    logger.info(f"✓ 日志系统已重新配置")
+    
+    # 修改 prepare_test_motor_parameters 函数以使用外部参数
+    original_prepare = test_pmsm_fcc.prepare_test_motor_parameters
+    
+    def prepare_external_params():
+        """使用外部加载的参数"""
+        test_pmsm_fcc.logger.info("使用外部加载的电机参数")
+        return params
+    
+    # 临时替换函数
+    test_pmsm_fcc.prepare_test_motor_parameters = prepare_external_params
+    
+    # 7. 运行所有测试
+    logger.info("\n" + "="*70)
+    logger.info("步骤6: 运行完整测试套件")
+    logger.info("="*70)
+    
+    try:
+        test_pmsm_fcc.run_all_tests()
+        logger.info("\n" + "="*70)
+        logger.info("✓ 测试执行完成！")
+        logger.info("="*70)
+        logger.info(f"\n测试结果保存在: {output_dir}/")
+        logger.info("\n查看生成的图表和日志文件以了解详细结果。")
+        logger.info("="*70)
+        
+        # 恢复原函数
+        test_pmsm_fcc.prepare_test_motor_parameters = original_prepare
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"\n测试执行过程中发生错误: {e}", exc_info=True)
+        # 恢复原函数
+        test_pmsm_fcc.prepare_test_motor_parameters = original_prepare
+        return False
 
 
 if __name__ == '__main__':
-    main()
-
+    # 命令行参数解析
+    parser = argparse.ArgumentParser(
+        description='从外部CSV文件加载PMSM参数并运行测试',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+示例:
+    # 使用默认测试文件夹 (../ExternalValidation/example1)
+    python example_usage.py
+    
+    # 指定测试文件夹
+    python example_usage.py --folder ../ExternalValidation/example2
+    
+    # 使用绝对路径
+    python example_usage.py --folder "G:/Easimotor/WorkingFolder/SoftwareFunctionDesign/103_FiledCoupleClass/ExternalValidation/example1"
+        """
+    )
+    parser.add_argument(
+        '--folder', '-f',
+        type=str,
+        default=None,
+        help='测试文件夹路径（包含baseParams.csv、psid.csv、ld.csv、lq.csv）'
+    )
+    
+    args = parser.parse_args()
+    
+    # 执行主函数
+    success = main(args.folder)
+    
+    # 设置退出码
+    sys.exit(0 if success else 1)

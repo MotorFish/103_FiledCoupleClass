@@ -8,7 +8,7 @@
 - ✅ 电磁转矩计算
 - ✅ 电角速度计算
 - ✅ MTPA（最大转矩/电流比）控制轨迹计算
-- ✅ MTPV（最大转矩/功率比）控制轨迹计算
+- ✅ MTPV（最大转矩/电压比）控制轨迹计算
 - ✅ 弱磁I区轨迹计算
 - ✅ 等转矩线计算
 - ✅ 等电压椭圆计算
@@ -33,7 +33,56 @@ pip install numpy scipy matplotlib
 
 ## 快速开始
 
-### 1. 基本使用
+### 1. 从外部CSV文件加载参数
+
+如果您有外部测试数据（例如从有限元仿真导出的CSV文件），可以使用 `example_usage.py` 快速加载并测试：
+
+```bash
+# 使用默认测试文件夹 (ExternalValidation/example1)
+python example_usage.py
+
+# 指定自定义测试文件夹
+python example_usage.py --folder ../ExternalValidation/example2
+
+# 使用绝对路径
+python example_usage.py --folder "G:/path/to/test/folder"
+```
+
+**CSV文件格式要求**：
+
+测试文件夹应包含以下4个CSV文件：
+
+1. **baseParams.csv** - 基本参数（键值对格式）：
+```csv
+Udc,540
+Imax,300
+connectType,'Y'
+modulationType,'SVPWM'
+polePairs,4
+Lsigma,1.50E-05
+Rs,0.02
+```
+
+2. **psid.csv** - d轴总磁链-id曲线（跳过前4行标题）：
+```csv
+直轴磁链(Psid)曲线
+Psid(Iq=0)
+true
+直轴电流Id[amp],直轴磁链Psid[weber]
+-3.227,0.344876
+-3.012,0.360578
+...
+```
+
+3. **ld.csv** - d轴电感-id曲线（格式同上）
+4. **lq.csv** - q轴电感-iq曲线（格式同上）
+
+**注意**：
+- 程序支持传入 `PsiD_vs_id`（d轴总磁链）或 `PsiR_vs_id`（永磁磁链）
+- 如果传入 `PsiD_vs_id`，会自动转换为 `PsiR_vs_id`（使用公式：PsiR = PsiD - Ld × id）
+- 测试结果（图片和日志）会保存在测试文件夹的 `test_results/` 子目录中
+
+### 2. 基本使用（编程方式）
 
 ```python
 import numpy as np
@@ -72,8 +121,7 @@ calculator = PMSMFieldCoupledCalculator(
     modulationType='SVPWM',  # 调制方式
     polePairs=4,        # 极对数
     Lsigma=0.015e-3,    # 定子漏抗 [H]
-    Rs=0.02,            # 相电阻 [Ω]
-    We_base=100.0       # 基速 [rad/s]
+    Rs=0.02             # 相电阻 [Ω]
 )
 ```
 
@@ -101,7 +149,7 @@ print(f"最大转矩: {id0_track[-1, 3]:.2f} N·m")
 ### 4. 生成非弱磁控制结果
 
 ```python
-# 生成MTPA非弱磁控制结果
+# 生成MTPA/id0控制结果
 result = calculator.generate_non_fw_result(
     controlType='mtpa',      # 控制策略: 'id0' 或 'mtpa'
     temTarget=500.0,         # 目标转矩 [N·m]
@@ -125,21 +173,18 @@ print(f"工况点: iq={result['givenPoint'][0]:.2f} A, "
 ### 5. 生成弱磁控制结果
 
 ```python
-# 检查是否发生退磁
-if calculator.isDemag:
-    # 生成弱磁MTPA控制结果
-    fw_result = calculator.generate_fw_result(
-        controlType='mtpa',
-        temTarget=500.0,
-        weTarget=500.0,
-        loadType='constWe'
-    )
-    
-    print(f"弱磁控制工况点: "
-          f"Tem={fw_result['givenPoint'][2]:.2f} N·m, "
-          f"We={fw_result['givenPoint'][3]:.2f} rad/s")
-else:
-    print("未发生完全退磁，不需要弱磁控制")
+# 生成包含弱磁控制的结果
+fw_result = calculator.generate_fw_result(
+    controlType='mtpa',
+    temTarget=500.0,
+    weTarget=500.0,
+    loadType='constWe'
+)
+
+print(f"工况点: iq={result['givenPoint'][0]:.2f} A, "
+      f"id={result['givenPoint'][1]:.2f} A, "
+      f"Tem={result['givenPoint'][2]:.2f} N·m, "
+      f"We={result['givenPoint'][3]:.2f} rad/s")
 ```
 
 ## 运行测试
@@ -190,6 +235,37 @@ calculator = PMSMFieldCoupledCalculator(
 )
 ```
 
+### PsiD_vs_id 与 PsiR_vs_id
+
+计算器支持两种磁链输入方式：
+
+**方式1：传入永磁磁链 PsiR_vs_id（推荐用于已知永磁磁链的情况）**
+```python
+calculator = PMSMFieldCoupledCalculator(
+    PsiR_vs_id=PsiR_vs_id,  # 永磁磁链-id曲线
+    Lad_vs_id=Lad_vs_id,
+    Laq_vs_iq=Laq_vs_iq,
+    ...
+)
+```
+
+**方式2：传入总磁链 PsiD_vs_id（适用于有限元仿真结果）**
+```python
+calculator = PMSMFieldCoupledCalculator(
+    PsiD_vs_id=PsiD_vs_id,  # d轴总磁链-id曲线
+    Lad_vs_id=Lad_vs_id,
+    Laq_vs_iq=Laq_vs_iq,
+    ...
+)
+```
+
+**说明**：
+- `PsiD` 是d轴总磁链（包含永磁磁链和电枢反应磁链）
+- `PsiR` 是永磁磁链（仅永磁体产生的磁链）
+- 转换公式：`PsiR = PsiD - Ld × id`
+- 如果传入 `PsiD_vs_id`，程序会自动转换为 `PsiR_vs_id`
+- **必须传入二者之一，不能同时传入**
+
 ### 计算等转矩线
 
 ```python
@@ -236,11 +312,17 @@ print(f"最大转矩: {Tem_max:.2f} N·m")
 
 **返回**: numpy数组 (N×5): [iq, id, Is, Tem, maxWe]
 
-#### calc_mtpv_track(We_base)
+#### calc_mtpv_track(nonFWTrack)
 计算MTPV控制策略的电流轨迹。
 
+**重要说明**: 
+- MTPV轨迹计算，只有当 `isDemag=True` 时才有意义
+- 如果未发生完全退磁，应跳过MTPV轨迹计算
+
 **参数**:
-- `We_base`: 基速 [rad/s]
+- `nonFWTrack`: 非弱磁轨迹（id0或MTPA轨迹），用于自动获取基速
+  - 格式: numpy数组 (N×5): [iq, id, Is, Tem, We]
+  - 基速从轨迹最后一个点的We获取（序列中的最小角速度）
 
 **返回**: numpy数组 (N×5): [iq, id, Is, Tem, We]
 
@@ -314,7 +396,7 @@ print(f"最大转矩: {Tem_max:.2f} N·m")
 
 ### 2. 什么时候需要弱磁控制？
 
-当电机需要在基速以上运行时，需要采用弱磁控制。计算器会自动检测是否需要弱磁（通过`isDemag`属性）。
+当电机需要在基速以上运行时，需要采用弱磁控制。
 
 ### 3. 如何解释计算结果？
 
@@ -322,13 +404,13 @@ print(f"最大转矩: {Tem_max:.2f} N·m")
 - **IsTrackAtMaxCapacity**: 显示每个转速下的最大转矩输出能力
 - **equTemTrack**: 显示恒定转矩下，转速从0到最大的控制轨迹
 - **equWeTrack**: 显示恒定转速下，转矩从0到最大的控制轨迹
-- **givenPoint**: 显示特定工况（目标转矩+转速）下的最优控制点
+- **givenPoint**: 显示特定工况（目标转矩+转速）下的最优控制点(铜耗最小原则)
 
 ### 4. 为什么有些计算会失败？
 
 常见原因：
-- 目标转矩超出电机能力
-- 目标转速超出电压限制
+- 目标转矩超出电机能力（自动截断到最大转矩）
+- 目标转速超出电压限制（自动截断到最大转速）
 - 电机参数不合理（如负电感）
 - 数值计算未收敛
 

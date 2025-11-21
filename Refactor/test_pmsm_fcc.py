@@ -22,41 +22,82 @@ from pmsm_fcc_calculator import PMSMFieldCoupledCalculator
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
-# 创建输出文件夹
+# 全局输出目录（可由外部修改）
 OUTPUT_DIR = 'test_results'
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
 
-# 配置日志 - 同时输出到控制台和文件
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
-# 创建格式化器
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+def setup_output_directory(output_dir: str = None):
+    """
+    设置输出目录并创建
+    
+    Args:
+        output_dir: 输出目录路径。如果为None，使用默认的OUTPUT_DIR
+    
+    Returns:
+        实际使用的输出目录路径
+    """
+    global OUTPUT_DIR
+    if output_dir is not None:
+        OUTPUT_DIR = output_dir
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+    return OUTPUT_DIR
 
-# 控制台处理器
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-console_handler.setFormatter(formatter)
 
-# 文件处理器
-log_file = os.path.join(OUTPUT_DIR, 'test_log.txt')
-file_handler = logging.FileHandler(log_file, mode='w', encoding='utf-8')
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(formatter)
+# 初始化输出目录
+setup_output_directory()
 
-# 添加处理器
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
 
-# 同时配置pmsm_fcc_calculator的日志
-calc_logger = logging.getLogger('pmsm_fcc_calculator')
-calc_logger.setLevel(logging.INFO)
-calc_logger.addHandler(console_handler)
-calc_logger.addHandler(file_handler)
+def setup_logging(output_dir: str = None):
+    """
+    配置日志系统
+    
+    Args:
+        output_dir: 输出目录路径。如果为None，使用全局OUTPUT_DIR
+    """
+    global OUTPUT_DIR, logger, calc_logger
+    
+    if output_dir is not None:
+        OUTPUT_DIR = output_dir
+    
+    # 清除现有的handlers
+    logger = logging.getLogger(__name__)
+    logger.handlers.clear()
+    logger.setLevel(logging.INFO)
+    
+    # 创建格式化器
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    
+    # 控制台处理器
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    
+    # 文件处理器
+    log_file = os.path.join(OUTPUT_DIR, 'test_log.txt')
+    file_handler = logging.FileHandler(log_file, mode='w', encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    
+    # 添加处理器
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+    
+    # 同时配置pmsm_fcc_calculator的日志
+    calc_logger = logging.getLogger('pmsm_fcc_calculator')
+    calc_logger.handlers.clear()
+    calc_logger.setLevel(logging.INFO)
+    calc_logger.addHandler(console_handler)
+    calc_logger.addHandler(file_handler)
+    
+    logger.info(f"创建输出文件夹: {OUTPUT_DIR}")
+    logger.info(f"日志将保存到: {log_file}")
+    
+    return logger, calc_logger
 
-logger.info(f"创建输出文件夹: {OUTPUT_DIR}")
-logger.info(f"日志将保存到: {log_file}")
+
+# 初始化日志
+logger, calc_logger = setup_logging()
 
 
 def prepare_test_motor_parameters():
@@ -104,8 +145,7 @@ def prepare_test_motor_parameters():
         'modulationType': 'SVPWM',
         'polePairs': 4,
         'Lsigma': 0.015e-3,
-        'Rs': 0.02,
-        'We_base': 100.0
+        'Rs': 0.02
     }
     
     logger.info("电机参数准备完成")
@@ -214,7 +254,10 @@ def test_mtpv_track():
         logger.warning("未发生完全退磁，跳过MTPV测试")
         return None
     
-    mtpv_track = calc.calc_mtpv_track(We_base=calc.We_base)
+    # 先计算MTPA轨迹作为基础轨迹
+    mtpa_track = calc.calc_mtpa_track()
+    # 使用MTPA轨迹计算MTPV轨迹（基速从MTPA最后一点获取）
+    mtpv_track = calc.calc_mtpv_track(nonFWTrack=mtpa_track)
     
     logger.info(f"MTPV轨迹点数: {len(mtpv_track)}")
     if len(mtpv_track) > 0:
@@ -353,17 +396,32 @@ def plot_motor_characteristics():
     logger.info("="*70)
     
     params = prepare_test_motor_parameters()
-    PsiR_vs_id = params['PsiR_vs_id']
+    
+    # 支持PsiR_vs_id或PsiD_vs_id
+    if 'PsiR_vs_id' in params:
+        PsiR_vs_id = params['PsiR_vs_id']
+        psi_label = 'Ψr-id'
+        psi_ylabel = 'Ψr (Wb)'
+        psi_title = '磁链-id 曲线'
+    elif 'PsiD_vs_id' in params:
+        # 如果是PsiD，直接绘制PsiD（总磁链）
+        PsiR_vs_id = params['PsiD_vs_id']
+        psi_label = 'ΨD-id (总磁链)'
+        psi_ylabel = 'ΨD (Wb)'
+        psi_title = '总磁链-id 曲线'
+    else:
+        raise ValueError("params中必须包含 PsiR_vs_id 或 PsiD_vs_id")
+    
     Lad_vs_id = params['Lad_vs_id']
     Laq_vs_iq = params['Laq_vs_iq']
     
     fig, axes = plt.subplots(3, 1, figsize=(14, 10))
     
     # 磁链-id曲线
-    axes[0].plot(PsiR_vs_id[:, 0], PsiR_vs_id[:, 1], marker='o', label='Ψr-id')
+    axes[0].plot(PsiR_vs_id[:, 0], PsiR_vs_id[:, 1], marker='o', label=psi_label)
     axes[0].set_xlabel("id (A)")
-    axes[0].set_ylabel("Ψr (Wb)")
-    axes[0].set_title("磁链-id 曲线")
+    axes[0].set_ylabel(psi_ylabel)
+    axes[0].set_title(psi_title)
     axes[0].grid(True)
     axes[0].legend()
     

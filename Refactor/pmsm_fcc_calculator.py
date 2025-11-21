@@ -24,9 +24,8 @@
     >>> Lad_vs_id = np.column_stack([id_range, 0.006 + (-1.5e-8) * (id_range + 133.33)**2])
     >>> Laq_vs_iq = np.column_stack([iq_range, 9e-3 - 8.0e-9 * iq_range**2])
     >>> 
-    >>> # 创建计算器实例
+    >>> # 方式1: 使用永磁磁链PsiR创建计算器实例
     >>> calculator = PMSMFieldCoupledCalculator(
-    ...     PsiR_vs_id=PsiR_vs_id,
     ...     Lad_vs_id=Lad_vs_id,
     ...     Laq_vs_iq=Laq_vs_iq,
     ...     Udc=540.0,
@@ -36,7 +35,22 @@
     ...     polePairs=4,
     ...     Lsigma=0.015e-3,
     ...     Rs=0.02,
-    ...     We_base=100.0
+    ...     PsiR_vs_id=PsiR_vs_id
+    ... )
+    >>> 
+    >>> # 方式2: 使用d轴总磁链PsiD创建计算器（会自动转换为PsiR）
+    >>> PsiD_vs_id = np.column_stack([id_range, 0.5 + 0.006 * id_range])  # 示例数据
+    >>> calculator = PMSMFieldCoupledCalculator(
+    ...     Lad_vs_id=Lad_vs_id,
+    ...     Laq_vs_iq=Laq_vs_iq,
+    ...     Udc=540.0,
+    ...     Imax=300.0,
+    ...     connectType='Y',
+    ...     modulationType='SVPWM',
+    ...     polePairs=4,
+    ...     Lsigma=0.015e-3,
+    ...     Rs=0.02,
+    ...     PsiD_vs_id=PsiD_vs_id
     ... )
     >>> 
     >>> # 计算MTPA轨迹
@@ -75,12 +89,10 @@ class PMSMFieldCoupledCalculator:
         polePairs: 极对数
         Lsigma: 定子漏抗 [H]
         Rs: 定子相电阻 [Ω]
-        We_base: 基速 [rad/s]
     """
     
     def __init__(
         self,
-        PsiR_vs_id: np.ndarray,
         Lad_vs_id: np.ndarray,
         Laq_vs_iq: np.ndarray,
         Udc: float,
@@ -90,7 +102,8 @@ class PMSMFieldCoupledCalculator:
         polePairs: int,
         Lsigma: float,
         Rs: float,
-        We_base: float,
+        PsiR_vs_id: Optional[np.ndarray] = None,
+        PsiD_vs_id: Optional[np.ndarray] = None,
         # 计算常量配置（可选）
         id0Points: int = 200,
         mtpaPoints: int = 200,
@@ -116,7 +129,6 @@ class PMSMFieldCoupledCalculator:
         初始化PMSM场路耦合计算器
         
         Args:
-            PsiR_vs_id: 磁链-d轴电流曲线，第1列为id，第2列为PsiR
             Lad_vs_id: d轴激磁电感-d轴电流曲线，第1列为id，第2列为Ld
             Laq_vs_iq: q轴激磁电感-q轴电流曲线，第1列为iq，第2列为Lq
             Udc: 变频器母线电压 [V]
@@ -126,7 +138,8 @@ class PMSMFieldCoupledCalculator:
             polePairs: 极对数
             Lsigma: 定子漏抗 [H]
             Rs: 定子相电阻 [Ω]
-            We_base: 基速 [rad/s]
+            PsiR_vs_id: 永磁磁链-d轴电流曲线，第1列为id，第2列为PsiR（可选，与PsiD_vs_id二选一）
+            PsiD_vs_id: d轴总磁链-d轴电流曲线，第1列为id，第2列为PsiD（可选，与PsiR_vs_id二选一）
             id0Points: id=0控制策略iq扫描点数
             mtpaPoints: MTPA曲线扫描点数
             idPointsAtICircle: 定子电流圆id扫描点数
@@ -147,6 +160,19 @@ class PMSMFieldCoupledCalculator:
             IsSmoothInterp: 是否使用三次插值
             logger: 自定义日志记录器
         """
+        # 配置日志
+        self.logger = logger if logger is not None else logging.getLogger(__name__)
+        
+        # 验证：必须传入 PsiR_vs_id 或 PsiD_vs_id 之一（且仅一个）
+        if (PsiR_vs_id is None) == (PsiD_vs_id is None):
+            raise ValueError("必须传入 PsiR_vs_id 或 PsiD_vs_id 之一（且仅一个）")
+        
+        # 如果传入 PsiD_vs_id，转换为 PsiR_vs_id
+        if PsiD_vs_id is not None:
+            self.logger.info("检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id")
+            PsiR_vs_id = self._convert_PsiD_to_PsiR(PsiD_vs_id, Lad_vs_id)
+            self.logger.info(f"转换完成，PsiR_vs_id 点数: {len(PsiR_vs_id)}")
+        
         # 保存电机参数
         self.PsiR_vs_id = PsiR_vs_id
         self.Lad_vs_id = Lad_vs_id
@@ -158,7 +184,7 @@ class PMSMFieldCoupledCalculator:
         self.polePairs = polePairs
         self.Lsigma = Lsigma
         self.Rs = Rs
-        self.We_base = We_base
+        self.We_base = None
         
         # 保存计算常量
         self.id0Points = id0Points
@@ -179,20 +205,6 @@ class PMSMFieldCoupledCalculator:
         self.constTemPointsAtFW = constTemPointsAtFW
         self.constWePointsAtFW = constWePointsAtFW
         self.IsSmoothInterp = IsSmoothInterp
-        
-        # 初始化日志记录器
-        if logger is None:
-            self.logger = logging.getLogger(__name__)
-            if not self.logger.handlers:
-                handler = logging.StreamHandler()
-                formatter = logging.Formatter(
-                    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-                )
-                handler.setFormatter(formatter)
-                self.logger.addHandler(handler)
-                self.logger.setLevel(logging.INFO)
-        else:
-            self.logger = logger
         
         self.logger.info("初始化PMSM场路耦合计算器")
         
@@ -241,6 +253,67 @@ class PMSMFieldCoupledCalculator:
     # ========================================
     # 第一部分：通用计算方法（私有）
     # ========================================
+    
+    def _convert_PsiD_to_PsiR(
+        self,
+        PsiD_vs_id: np.ndarray,
+        Lad_vs_id: np.ndarray
+    ) -> np.ndarray:
+        """
+        将d轴总磁链PsiD转换为永磁磁链PsiR
+        
+        转换公式: PsiR = PsiD - Ld * id
+        
+        Args:
+            PsiD_vs_id: d轴总磁链-d轴电流曲线 (N×2)，第1列为id，第2列为PsiD
+            Lad_vs_id: d轴激磁电感-d轴电流曲线 (N×2)，第1列为id，第2列为Ld
+        
+        Returns:
+            PsiR_vs_id: 永磁磁链-d轴电流曲线 (M×2)，第1列为id，第2列为PsiR
+                       注意：如果某些id点在Lad_vs_id范围外，会被跳过，因此M可能<N
+        """
+        # 提取Lad_vs_id的范围
+        id_Ld_min = Lad_vs_id[:, 0].min()
+        id_Ld_max = Lad_vs_id[:, 0].max()
+        
+        # 创建插值函数（使用线性插值更稳定）
+        Ld_interp = interp1d(
+            Lad_vs_id[:, 0], 
+            Lad_vs_id[:, 1], 
+            kind='linear',
+            fill_value='extrapolate'
+        )
+        
+        PsiR_list = []
+        skipped_count = 0
+        
+        for i in range(len(PsiD_vs_id)):
+            id_val = PsiD_vs_id[i, 0]
+            PsiD_val = PsiD_vs_id[i, 1]
+            
+            # 检查id是否在Lad_vs_id的范围内
+            if id_val < id_Ld_min or id_val > id_Ld_max:
+                self.logger.warning(
+                    f"id={id_val:.2f} A 超出Lad_vs_id范围 [{id_Ld_min:.2f}, {id_Ld_max:.2f}]，跳过此点"
+                )
+                skipped_count += 1
+                continue
+            
+            # 插值获取对应的Ld
+            Ld_val = float(Ld_interp(id_val))
+            
+            # 计算 PsiR = PsiD - Ld * id
+            PsiR_val = PsiD_val - Ld_val * id_val
+            
+            PsiR_list.append([id_val, PsiR_val])
+        
+        if skipped_count > 0:
+            self.logger.info(f"PsiD转PsiR: 跳过 {skipped_count} 个点，保留 {len(PsiR_list)} 个点")
+        
+        if len(PsiR_list) == 0:
+            raise ValueError("PsiD_vs_id中没有任何点在Lad_vs_id范围内，无法转换")
+        
+        return np.array(PsiR_list)
     
     def _interp_sorted(
         self,
@@ -794,6 +867,9 @@ class PMSMFieldCoupledCalculator:
             id0Track.append([iq, id, Is, Tem, maxWe])
         
         id0Track = np.array(id0Track)
+        if self.We_base is None:
+            self.We_base = id0Track[-1, 4]
+            self.logger.info(f"基速自动获取为{self.We_base:.2f} rad/s")
         self.logger.info(f"id=0电流轨迹计算完成，轨迹点数={len(id0Track)}")
         
         return id0Track
@@ -844,21 +920,28 @@ class PMSMFieldCoupledCalculator:
             last_id_max = id_max
         
         mtpaTrack = np.array(mtpaTrack)
+        if self.We_base is None:
+            self.We_base = mtpaTrack[-1, 4]
+            self.logger.info(f"基速自动获取为{self.We_base:.2f} rad/s")
         self.logger.info(f"MTPA电流轨迹计算完成，轨迹点数={len(mtpaTrack)}, 最大转矩={mtpaTrack[-1, 3]:.2f} N·m")
         
         return mtpaTrack
     
-    def calc_mtpv_track(self, We_base: float) -> np.ndarray:
+    def calc_mtpv_track(self, nonFWTrack: np.ndarray) -> np.ndarray:
         """
         计算MTPV(最大转矩/功率比)电流轨迹
         
         Args:
-            We_base: 基速 [rad/s]
+            nonFWTrack: 基础轨迹（id0或MTPA轨迹），用于获取基速
+                      格式：(N×5)，[[iq, id, Is, Tem, We], ...]
+                      基速从轨迹最后一个点的We获取（序列中的最小角速度）
         
         Returns:
             mtpvTrack: MTPV电流轨迹 (N×5)，格式：[[iq, id, Is, Tem, We], ...]
         """
-        self.logger.info(f"开始计算MTPV电流轨迹，基速={We_base:.2f} rad/s")
+        # 从基础轨迹的最后一个点获取基速（最小角速度）
+        We_base = self.We_base
+        self.logger.info(f"开始计算MTPV电流轨迹，基速={We_base:.2f} rad/s（从基础轨迹获取）")
         
         if self.IPmax <= abs(self.id_demag):
             raise ValueError(
@@ -1420,6 +1503,10 @@ class PMSMFieldCoupledCalculator:
         """
         生成弱磁控制策略结果
         
+        本方法计算弱磁控制下的完整性能曲线，包括：
+        - 弱磁I区轨迹（fw1Track）：总是计算
+        - 弱磁II区轨迹（mtpvTrack）：仅在isDemag=True时计算
+        
         Args:
             controlType: 控制策略，'id0'或'mtpa'
             temTarget: 目标转矩 [N·m]
@@ -1448,8 +1535,14 @@ class PMSMFieldCoupledCalculator:
             raise ValueError(f"不支持的控制策略: {controlType}")
         
         # 生成MTPV和弱磁I区轨迹
-        nonFwIsTrack_end = nonFwIsTrack[-1]
-        mtpvTrack = self.calc_mtpv_track(We_base=nonFwIsTrack_end[weIdx])
+        # 注意：只有发生完全退磁时，MTPV轨迹才有意义
+        if self.isDemag:
+            mtpvTrack = self.calc_mtpv_track(nonFWTrack=nonFwIsTrack)
+            self.logger.info(f"发生完全退磁，计算MTPV轨迹，点数={len(mtpvTrack)}")
+        else:
+            mtpvTrack = None
+            self.logger.info("未发生完全退磁，跳过MTPV轨迹计算")
+        
         fw1Track = self.calc_fw1_track(mtpaTrack=nonFwIsTrack, mtpvTrack=mtpvTrack)
         
         # IsRange
