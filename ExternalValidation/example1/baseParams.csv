@@ -1,9 +1,11 @@
-﻿Udc,540
-Imax,300
+﻿Udc,310
+Imax,3.2
 connectType,'Y'
 modulationType,'SVPWM'
-polePairs,4
+polePairs,2
 Lsigma,1.50E-05
-Rs,0.02
+Rs,11.67
 Tem_target,1.0
-We_target,1.0
+rspeed_target,1500.0
+controlType,'id0'
+loadType,'constTem'

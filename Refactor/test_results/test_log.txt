@@ -1,2 +1,8 @@
-2025-11-21 11:46:22,965 - test_pmsm_fcc - INFO - 创建输出文件夹: test_results
-2025-11-21 11:46:22,965 - test_pmsm_fcc - INFO - 日志将保存到: test_results\test_log.txt
+2025-11-21 19:24:12,998 - INFO - [test_pmsm_fcc.py:218] - 创建输出文件夹: test_results
+2025-11-21 19:24:12,999 - INFO - [test_pmsm_fcc.py:219] - 日志将保存到: test_results\test_log.txt
+2025-11-21 19:24:12,999 - INFO - [test_pmsm_fcc.py:235] - 准备测试用电机参数
+2025-11-21 19:24:12,999 - INFO - [test_pmsm_fcc.py:276] - 电机参数准备完成
+2025-11-21 19:24:12,999 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-21 19:24:12,999 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=311.77 V, IPmax=300.00 A
+2025-11-21 19:24:13,002 - WARNING - [pmsm_fcc_calculator.py:422] - 搜索未收敛: 达到最大迭代次数100，误差=8.195970e-04
+2025-11-21 19:24:13,002 - INFO - [pmsm_fcc_calculator.py:210] - 发生完全退磁，去磁电流: id_demag=-171.66 A

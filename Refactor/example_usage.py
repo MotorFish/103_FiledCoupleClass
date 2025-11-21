@@ -73,7 +73,7 @@ def read_base_params(csv_path: str) -> dict:
             value = ','.join(parts[1:]).strip()  # 处理可能含逗号的值
             
             # 处理不同类型的值
-            if key in ['connectType', 'modulationType']:
+            if key in ['connectType', 'modulationType', 'controlType', 'loadType']:
                 # 字符串类型，去掉单引号
                 value = value.strip("'\"")
             elif key in ['polePairs']:
@@ -212,17 +212,31 @@ def main(test_folder_path: str = None):
     logger.info("步骤3: 组装参数")
     logger.info("="*70)
     
+    # 从base_params中分离出测试配置参数和电机参数
+    motor_params = {}
+    test_config_params = {}
+    
+    for key, value in base_params.items():
+        if key in ['Tem_target', 'rspeed_target', 'controlType', 'loadType']:
+            # 测试配置参数，不传给计算器
+            test_config_params[key] = value
+        else:
+            # 电机参数，传给计算器
+            motor_params[key] = value
+    
     params = {
         'PsiD_vs_id': PsiD_vs_id,  # 注意：传入PsiD，不是PsiR
         'Lad_vs_id': Lad_vs_id,
         'Laq_vs_iq': Laq_vs_iq,
-        **base_params  # 展开基本参数
+        **motor_params  # 展开电机参数（不包含测试配置）
     }
     
     logger.info(f"✓ 参数组装完成")
     logger.info(f"  PsiD_vs_id: {PsiD_vs_id.shape}")
     logger.info(f"  Lad_vs_id: {Lad_vs_id.shape}")
     logger.info(f"  Laq_vs_iq: {Laq_vs_iq.shape}")
+    logger.info(f"  电机参数: {len(motor_params)} 个")
+    logger.info(f"  测试配置参数: {len(test_config_params)} 个")
     
     # 5. 创建输出目录（在测试文件夹下）
     logger.info("\n" + "="*70)
@@ -248,24 +262,70 @@ def main(test_folder_path: str = None):
     test_pmsm_fcc.setup_logging(output_dir)
     logger.info(f"✓ 日志系统已重新配置")
     
-    # 修改 prepare_test_motor_parameters 函数以使用外部参数
-    original_prepare = test_pmsm_fcc.prepare_test_motor_parameters
+    # 6.5. 配置测试工况参数（从baseParams.csv读取）
+    logger.info("\n" + "="*70)
+    logger.info("步骤5.5: 配置测试工况参数")
+    logger.info("="*70)
     
-    def prepare_external_params():
-        """使用外部加载的参数"""
-        test_pmsm_fcc.logger.info("使用外部加载的电机参数")
-        return params
+    # 从test_config_params中提取测试目标参数
+    tem_target = test_config_params.get('Tem_target', 500.0)  # 默认500 N·m
+    rspeed_target = test_config_params.get('rspeed_target', 1000.0)  # 默认1000 rpm
+    control_type = test_config_params.get('controlType', 'mtpa')  # 默认mtpa
+    load_type = test_config_params.get('loadType', 'constTem')  # 如果未指定，默认恒转矩负载
+    pole_pairs = motor_params.get('polePairs')
     
-    # 临时替换函数
-    test_pmsm_fcc.prepare_test_motor_parameters = prepare_external_params
+    logger.info(f"从baseParams.csv读取测试工况参数:")
+    logger.info(f"  控制策略: {control_type}")
+    logger.info(f"  目标转矩: {tem_target:.1f} N·m")
+    logger.info(f"  目标机械转速: {rspeed_target:.1f} rpm")
+    logger.info(f"  负载类型: {load_type}")
+    logger.info(f"  极对数: {pole_pairs}")
+    
+    # 计算对应的电角速度（用于日志显示）
+    we_target = test_pmsm_fcc.TestConfig.rpm_to_we(rspeed_target, pole_pairs)
+    logger.info(f"  对应电角速度: {we_target:.2f} rad/s")
+    
+    # 配置TestConfig类的所有测试工况参数
+    # 所有测试工况使用相同的目标值
+    test_pmsm_fcc.TestConfig.CONTROL_TYPE = control_type
+    
+    test_pmsm_fcc.TestConfig.NON_FW_TEM_TARGET = tem_target
+    test_pmsm_fcc.TestConfig.NON_FW_N_TARGET = rspeed_target
+    test_pmsm_fcc.TestConfig.NON_FW_WE_TARGET = None  # 使用转速，不使用电角速度
+    test_pmsm_fcc.TestConfig.NON_FW_LOAD_TYPE = load_type
+    
+    test_pmsm_fcc.TestConfig.FW_TEM_TARGET = tem_target
+    test_pmsm_fcc.TestConfig.FW_N_TARGET = rspeed_target
+    test_pmsm_fcc.TestConfig.FW_WE_TARGET = None
+    test_pmsm_fcc.TestConfig.FW_LOAD_TYPE = load_type
+    
+    test_pmsm_fcc.TestConfig.OP_TEM_TARGET = tem_target
+    test_pmsm_fcc.TestConfig.OP_N_TARGET = rspeed_target
+    test_pmsm_fcc.TestConfig.OP_WE_TARGET = None
+    
+    logger.info(f"✓ TestConfig配置完成")
+    logger.info(f"  控制策略: {test_pmsm_fcc.TestConfig.CONTROL_TYPE}")
+    logger.info(f"  负载类型: 非弱磁={test_pmsm_fcc.TestConfig.NON_FW_LOAD_TYPE}, "
+                f"  弱磁={test_pmsm_fcc.TestConfig.FW_LOAD_TYPE}")
+    logger.info(f"  非弱磁测试: Tem={test_pmsm_fcc.TestConfig.NON_FW_TEM_TARGET:.1f} N·m, "
+                f"n={test_pmsm_fcc.TestConfig.NON_FW_N_TARGET:.1f} rpm")
+    logger.info(f"  弱磁测试: Tem={test_pmsm_fcc.TestConfig.FW_TEM_TARGET:.1f} N·m, "
+                f"n={test_pmsm_fcc.TestConfig.FW_N_TARGET:.1f} rpm")
+    logger.info(f"  工况点测试: Tem={test_pmsm_fcc.TestConfig.OP_TEM_TARGET:.1f} N·m, "
+                f"n={test_pmsm_fcc.TestConfig.OP_N_TARGET:.1f} rpm")
     
     # 7. 运行所有测试
     logger.info("\n" + "="*70)
     logger.info("步骤6: 运行完整测试套件")
     logger.info("="*70)
+    logger.info("注意：所有测试工况将使用以下参数:")
+    logger.info(f"  - 控制策略: {control_type}")
+    logger.info(f"  - 目标转矩: {tem_target:.1f} N·m")
+    logger.info(f"  - 目标转速: {rspeed_target:.1f} rpm ({we_target:.2f} rad/s)")
+    logger.info("")
     
     try:
-        test_pmsm_fcc.run_all_tests()
+        test_pmsm_fcc.run_all_tests(params)
         logger.info("\n" + "="*70)
         logger.info("✓ 测试执行完成！")
         logger.info("="*70)
@@ -273,15 +333,10 @@ def main(test_folder_path: str = None):
         logger.info("\n查看生成的图表和日志文件以了解详细结果。")
         logger.info("="*70)
         
-        # 恢复原函数
-        test_pmsm_fcc.prepare_test_motor_parameters = original_prepare
-        
         return True
         
     except Exception as e:
         logger.error(f"\n测试执行过程中发生错误: {e}", exc_info=True)
-        # 恢复原函数
-        test_pmsm_fcc.prepare_test_motor_parameters = original_prepare
         return False
 
 

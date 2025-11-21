@@ -26,6 +26,138 @@ plt.rcParams['axes.unicode_minus'] = False
 OUTPUT_DIR = 'test_results'
 
 
+# ========================================
+# 测试配置参数（可由外部修改）
+# ========================================
+
+class TestConfig:
+    """测试配置类，用于管理测试参数"""
+    
+    # 控制策略类型
+    CONTROL_TYPE = 'mtpa'        # 控制策略: 'id0' 或 'mtpa'
+    
+    # 非弱磁控制测试工况
+    NON_FW_TEM_TARGET = 500.0    # 目标转矩 [N·m]
+    NON_FW_WE_TARGET = 200.0     # 目标电角速度 [rad/s]
+    NON_FW_N_TARGET = None       # 目标机械转速 [rpm]，如果设置则使用此值计算电角速度
+    NON_FW_LOAD_TYPE = 'constTem'  # 负载类型: 'constTem' 或 'constWe'
+    
+    # 弱磁控制测试工况
+    FW_TEM_TARGET = 500.0        # 目标转矩 [N·m]
+    FW_WE_TARGET = 500.0         # 目标电角速度 [rad/s]
+    FW_N_TARGET = None           # 目标机械转速 [rpm]，如果设置则使用此值计算电角速度
+    FW_LOAD_TYPE = 'constWe'     # 负载类型: 'constTem' 或 'constWe'
+    
+    # 给定工况点测试
+    OP_TEM_TARGET = 200.0        # 目标转矩 [N·m]
+    OP_WE_TARGET = 500.0         # 目标电角速度 [rad/s]
+    OP_N_TARGET = None           # 目标机械转速 [rpm]，如果设置则使用此值计算电角速度
+    
+    @classmethod
+    def rpm_to_we(cls, n_rpm: float, pole_pairs: int) -> float:
+        """
+        将机械转速（rpm）转换为电角速度（rad/s）
+        
+        Args:
+            n_rpm: 机械转速 [rpm]
+            pole_pairs: 极对数
+        
+        Returns:
+            电角速度 [rad/s]
+        
+        公式: We = n_rpm * (2π/60) * pole_pairs
+        """
+        return n_rpm * (2 * np.pi / 60) * pole_pairs
+    
+    @classmethod
+    def we_to_rpm(cls, we: float, pole_pairs: int) -> float:
+        """
+        将电角速度（rad/s）转换为机械转速（rpm）
+        
+        Args:
+            we: 电角速度 [rad/s]
+            pole_pairs: 极对数
+        
+        Returns:
+            机械转速 [rpm]
+        
+        公式: n_rpm = We * 60 / (2π * pole_pairs)
+        """
+        return we * 60 / (2 * np.pi * pole_pairs)
+    
+    @classmethod
+    def get_non_fw_targets(cls, pole_pairs: int) -> tuple:
+        """
+        获取非弱磁测试工况的目标值
+        
+        Args:
+            pole_pairs: 极对数
+        
+        Returns:
+            (temTarget, weTarget) 元组
+        """
+        tem_target = cls.NON_FW_TEM_TARGET
+        
+        if cls.NON_FW_N_TARGET is not None:
+            # 如果设置了机械转速，使用它计算电角速度
+            we_target = cls.rpm_to_we(cls.NON_FW_N_TARGET, pole_pairs)
+            logger.info(f"非弱磁测试: 使用机械转速 {cls.NON_FW_N_TARGET:.1f} rpm -> 电角速度 {we_target:.2f} rad/s")
+        else:
+            we_target = cls.NON_FW_WE_TARGET
+            n_rpm = cls.we_to_rpm(we_target, pole_pairs)
+            logger.info(f"非弱磁测试: 使用电角速度 {we_target:.2f} rad/s (对应机械转速 {n_rpm:.1f} rpm)")
+        
+        return tem_target, we_target
+    
+    @classmethod
+    def get_fw_targets(cls, pole_pairs: int) -> tuple:
+        """
+        获取弱磁测试工况的目标值
+        
+        Args:
+            pole_pairs: 极对数
+        
+        Returns:
+            (temTarget, weTarget) 元组
+        """
+        tem_target = cls.FW_TEM_TARGET
+        
+        if cls.FW_N_TARGET is not None:
+            # 如果设置了机械转速，使用它计算电角速度
+            we_target = cls.rpm_to_we(cls.FW_N_TARGET, pole_pairs)
+            logger.info(f"弱磁测试: 使用机械转速 {cls.FW_N_TARGET:.1f} rpm -> 电角速度 {we_target:.2f} rad/s")
+        else:
+            we_target = cls.FW_WE_TARGET
+            n_rpm = cls.we_to_rpm(we_target, pole_pairs)
+            logger.info(f"弱磁测试: 使用电角速度 {we_target:.2f} rad/s (对应机械转速 {n_rpm:.1f} rpm)")
+        
+        return tem_target, we_target
+    
+    @classmethod
+    def get_op_targets(cls, pole_pairs: int) -> tuple:
+        """
+        获取给定工况点测试的目标值
+        
+        Args:
+            pole_pairs: 极对数
+        
+        Returns:
+            (temTarget, weTarget) 元组
+        """
+        tem_target = cls.OP_TEM_TARGET
+        
+        if cls.OP_N_TARGET is not None:
+            # 如果设置了机械转速，使用它计算电角速度
+            we_target = cls.rpm_to_we(cls.OP_N_TARGET, pole_pairs)
+            logger.info(f"工况点测试: 使用机械转速 {cls.OP_N_TARGET:.1f} rpm -> 电角速度 {we_target:.2f} rad/s")
+        else:
+            we_target = cls.OP_WE_TARGET
+            n_rpm = cls.we_to_rpm(we_target, pole_pairs)
+            logger.info(f"工况点测试: 使用电角速度 {we_target:.2f} rad/s (对应机械转速 {n_rpm:.1f} rpm)")
+        
+        return tem_target, we_target
+
+
 def setup_output_directory(output_dir: str = None):
     """
     设置输出目录并创建
@@ -56,38 +188,31 @@ def setup_logging(output_dir: str = None):
         output_dir: 输出目录路径。如果为None，使用全局OUTPUT_DIR
     """
     global OUTPUT_DIR, logger, calc_logger
-    
+
     if output_dir is not None:
         OUTPUT_DIR = output_dir
-    
+
     # 清除现有的handlers
     logger = logging.getLogger(__name__)
     logger.handlers.clear()
     logger.setLevel(logging.INFO)
-    
-    # 创建格式化器
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    
-    # 控制台处理器
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-    console_handler.setFormatter(formatter)
-    
-    # 文件处理器
+
+    # 创建格式化器（包含文件名和行号）
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s')
+
+    # 仅文件处理器，不再添加控制台处理器
     log_file = os.path.join(OUTPUT_DIR, 'test_log.txt')
     file_handler = logging.FileHandler(log_file, mode='w', encoding='utf-8')
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
-    
-    # 添加处理器
-    logger.addHandler(console_handler)
+
+    # 添加文件处理器
     logger.addHandler(file_handler)
-    
+
     # 同时配置pmsm_fcc_calculator的日志
     calc_logger = logging.getLogger('pmsm_fcc_calculator')
     calc_logger.handlers.clear()
     calc_logger.setLevel(logging.INFO)
-    calc_logger.addHandler(console_handler)
     calc_logger.addHandler(file_handler)
     
     logger.info(f"创建输出文件夹: {OUTPUT_DIR}")
@@ -172,43 +297,13 @@ def create_calculator(params=None):
 # ========================================
 # 单元测试
 # ========================================
-
-def test_basic_calculations():
-    """测试基础计算功能"""
-    logger.info("="*70)
-    logger.info("开始测试基础计算功能")
-    logger.info("="*70)
-    
-    calc = create_calculator()
-    
-    # 测试转矩计算
-    id, iq = -50, 100
-    Tem = calc._calc_Tem(id, iq)
-    logger.info(f"转矩计算测试: id={id} A, iq={iq} A, Tem={Tem:.2f} N·m")
-    assert Tem > 0, "转矩应为正值"
-    
-    # 测试电压计算
-    we = 200.0
-    Up = calc._calc_Up(id, iq, we)
-    logger.info(f"电压计算测试: id={id} A, iq={iq} A, we={we} rad/s, Up={Up:.2f} V")
-    assert Up > 0, "电压应为正值"
-    
-    # 测试电角速度计算
-    success, msg, We = calc._calc_We(id, iq, calc.UPmax)
-    logger.info(f"电角速度计算测试: id={id} A, iq={iq} A, UPmax={calc.UPmax:.2f} V")
-    logger.info(f"  结果: success={success}, We={We:.2f} rad/s")
-    assert success, f"计算应该成功: {msg}"
-    
-    logger.info("✓ 基础计算功能测试通过\n")
-
-
-def test_id0_track():
+def test_id0_track(params=None):
     """测试id=0控制轨迹"""
     logger.info("="*70)
     logger.info("测试id=0控制轨迹")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     id0_track = calc.calc_id0_track()
     
     logger.info(f"id=0轨迹点数: {len(id0_track)}")
@@ -222,13 +317,13 @@ def test_id0_track():
     return id0_track
 
 
-def test_mtpa_track():
+def test_mtpa_track(params=None):
     """测试MTPA控制轨迹"""
     logger.info("="*70)
     logger.info("测试MTPA控制轨迹")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     mtpa_track = calc.calc_mtpa_track()
     
     logger.info(f"MTPA轨迹点数: {len(mtpa_track)}")
@@ -242,22 +337,25 @@ def test_mtpa_track():
     return mtpa_track
 
 
-def test_mtpv_track():
+def test_mtpv_track(params=None):
     """测试MTPV控制轨迹"""
     logger.info("="*70)
     logger.info("测试MTPV控制轨迹")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     
     if not calc.isDemag:
         logger.warning("未发生完全退磁，跳过MTPV测试")
         return None
     
-    # 先计算MTPA轨迹作为基础轨迹
-    mtpa_track = calc.calc_mtpa_track()
-    # 使用MTPA轨迹计算MTPV轨迹（基速从MTPA最后一点获取）
-    mtpv_track = calc.calc_mtpv_track(nonFWTrack=mtpa_track)
+    # 根据CONTROL_TYPE的值选择id0或mtpa轨迹作为基础轨迹
+    if getattr(TestConfig, 'CONTROL_TYPE', 'id0').lower() == 'id0':
+        base_track = calc.calc_id0_track()
+    else:
+        base_track = calc.calc_mtpa_track()
+    # 使用所选基础轨迹计算MTPV轨迹
+    mtpv_track = calc.calc_mtpv_track(nonFWTrack=base_track)
     
     logger.info(f"MTPV轨迹点数: {len(mtpv_track)}")
     if len(mtpv_track) > 0:
@@ -270,13 +368,13 @@ def test_mtpv_track():
     return mtpv_track
 
 
-def test_adaptive_search():
+def test_adaptive_search(params=None):
     """测试自适应搜索算法"""
     logger.info("="*70)
     logger.info("测试自适应搜索算法")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     
     # 测试求根
     def testFunc(x):
@@ -318,20 +416,31 @@ def test_adaptive_search():
 # 集成测试
 # ========================================
 
-def test_non_fw_result():
+def test_non_fw_result(params=None):
     """测试非弱磁控制结果生成"""
     logger.info("="*70)
     logger.info("测试非弱磁控制结果生成")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     
-    # 测试MTPA控制
+    # 获取测试工况参数
+    if params is None:
+        params = prepare_test_motor_parameters()
+    pole_pairs = params.get('polePairs')
+    tem_target, we_target = TestConfig.get_non_fw_targets(pole_pairs)
+    control_type = TestConfig.CONTROL_TYPE
+    load_type = TestConfig.NON_FW_LOAD_TYPE
+    
+    logger.info(f"使用控制策略: {control_type}")
+    logger.info(f"使用负载类型: {load_type}")
+    
+    # 测试控制策略
     result = calc.generate_non_fw_result(
-        controlType='mtpa',
-        temTarget=500.0,
-        weTarget=200.0,
-        loadType='constTem'
+        controlType=control_type,
+        temTarget=tem_target,
+        weTarget=we_target,
+        loadType=load_type
     )
     
     logger.info(f"IsRange点数: {len(result['IsRange'])}")
@@ -351,24 +460,31 @@ def test_non_fw_result():
     return result
 
 
-def test_fw_result():
+def test_fw_result(params=None):
     """测试弱磁控制结果生成"""
     logger.info("="*70)
     logger.info("测试弱磁控制结果生成")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     
-    if not calc.isDemag:
-        logger.warning("未发生完全退磁，跳过弱磁控制测试")
-        return None
+    # 获取测试工况参数
+    if params is None:
+        params = prepare_test_motor_parameters()
+    pole_pairs = params.get('polePairs')
+    tem_target, we_target = TestConfig.get_fw_targets(pole_pairs)
+    control_type = TestConfig.CONTROL_TYPE
+    load_type = TestConfig.FW_LOAD_TYPE
     
-    # 测试弱磁MTPA控制
+    logger.info(f"使用控制策略: {control_type}")
+    logger.info(f"使用负载类型: {load_type}")
+    
+    # 测试弱磁控制
     result = calc.generate_fw_result(
-        controlType='mtpa',
-        temTarget=500.0,
-        weTarget=500.0,
-        loadType='constWe'
+        controlType=control_type,
+        temTarget=tem_target,
+        weTarget=we_target,
+        loadType=load_type
     )
     
     logger.info(f"IsRange点数: {len(result['IsRange'])}")
@@ -389,13 +505,14 @@ def test_fw_result():
 # 可视化功能
 # ========================================
 
-def plot_motor_characteristics():
+def plot_motor_characteristics(params=None):
     """绘制电机特性曲线"""
     logger.info("="*70)
     logger.info("绘制电机特性曲线")
     logger.info("="*70)
     
-    params = prepare_test_motor_parameters()
+    if params is None:
+        params = prepare_test_motor_parameters()
     
     # 支持PsiR_vs_id或PsiD_vs_id
     if 'PsiR_vs_id' in params:
@@ -448,74 +565,63 @@ def plot_motor_characteristics():
     plt.close()
 
 
-def plot_mtpa_track(mtpa_track):
-    """绘制MTPA轨迹"""
+def plot_NonFw_track(nonFw_track):
+    """绘制非弱磁区轨迹"""
     logger.info("="*70)
-    logger.info("绘制MTPA轨迹")
+    logger.info("绘制非弱磁区轨迹")
     logger.info("="*70)
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     
     # id-iq轨迹
-    axes[0, 0].plot(mtpa_track[:, 1], mtpa_track[:, 0], 'b-o', markersize=3)
+    axes[0, 0].plot(nonFw_track[:, 1], nonFw_track[:, 0], 'b-o', markersize=3)
     axes[0, 0].set_xlabel('id (A)')
     axes[0, 0].set_ylabel('iq (A)')
-    axes[0, 0].set_title('MTPA电流轨迹 (id-iq平面)')
+    axes[0, 0].set_title('非弱磁区电流轨迹 (id-iq平面)')
     axes[0, 0].grid(True)
     axes[0, 0].axhline(y=0, color='k', linestyle='--', alpha=0.3)
     axes[0, 0].axvline(x=0, color='k', linestyle='--', alpha=0.3)
     
     # 转矩-电流幅值曲线
-    axes[0, 1].plot(mtpa_track[:, 2], mtpa_track[:, 3], 'r-o', markersize=3)
+    axes[0, 1].plot(nonFw_track[:, 2], nonFw_track[:, 3], 'r-o', markersize=3)
     axes[0, 1].set_xlabel('电流幅值 Is (A)')
     axes[0, 1].set_ylabel('电磁转矩 Tem (N·m)')
     axes[0, 1].set_title('转矩-电流幅值曲线')
     axes[0, 1].grid(True)
     
     # 转矩-id曲线
-    axes[1, 0].plot(mtpa_track[:, 1], mtpa_track[:, 3], 'g-o', markersize=3)
+    axes[1, 0].plot(nonFw_track[:, 1], nonFw_track[:, 3], 'g-o', markersize=3)
     axes[1, 0].set_xlabel('id (A)')
     axes[1, 0].set_ylabel('电磁转矩 Tem (N·m)')
     axes[1, 0].set_title('转矩-d轴电流曲线')
     axes[1, 0].grid(True)
     
     # 转矩-iq曲线
-    axes[1, 1].plot(mtpa_track[:, 0], mtpa_track[:, 3], 'm-o', markersize=3)
+    axes[1, 1].plot(nonFw_track[:, 0], nonFw_track[:, 3], 'm-o', markersize=3)
     axes[1, 1].set_xlabel('iq (A)')
     axes[1, 1].set_ylabel('电磁转矩 Tem (N·m)')
     axes[1, 1].set_title('转矩-q轴电流曲线')
     axes[1, 1].grid(True)
     
     plt.tight_layout()
-    output_path = os.path.join(OUTPUT_DIR, 'mtpa_track.png')
+    output_path = os.path.join(OUTPUT_DIR, 'nonFw_track.png')
     plt.savefig(output_path, dpi=150, bbox_inches='tight')
-    logger.info(f"✓ MTPA轨迹已保存到 {output_path}\n")
+    logger.info(f"✓ 非弱磁区轨迹已保存到 {output_path}\n")
     plt.close()
 
 
-def plot_current_range(IsRange, mtpa_track, fw1_track=None, mtpv_track=None):
+def plot_current_range(IsRange, params=None):
     """绘制完整电流控制范围"""
     logger.info("="*70)
     logger.info("绘制完整电流控制范围")
     logger.info("="*70)
     
-    calc = create_calculator()
+    calc = create_calculator(params)
     
     fig = plt.figure(figsize=(12, 10))
     
     # 绘制完整电流范围
     plt.plot(IsRange[:, 1], IsRange[:, 0], 'b-', linewidth=2.5, label='可利用电流矢量范围')
-    
-    # 绘制MTPA段
-    plt.plot(mtpa_track[:, 1], mtpa_track[:, 0], 'r-', linewidth=2, label='MTPA段', alpha=0.7)
-    
-    # 绘制弱磁I区段
-    if fw1_track is not None:
-        plt.plot(fw1_track[:, 1], fw1_track[:, 0], 'g-', linewidth=2, label='弱磁I区段', alpha=0.7)
-    
-    # 绘制MTPV段
-    if mtpv_track is not None and len(mtpv_track) > 0:
-        plt.plot(mtpv_track[:, 1], mtpv_track[:, 0], 'm-', linewidth=2, label='MTPV段', alpha=0.7)
     
     # 绘制电流圆限制
     theta = np.linspace(0, np.pi/2, 100)
@@ -592,17 +698,20 @@ def plot_control_result(result, title="控制策略轨迹分析"):
     plt.close()
 
 
-def plot_equ_lines_and_circles(calc, mtpa_track, fw1_track, mtpv_track=None):
-    """绘制等转矩线和等电压椭圆"""
+def plot_equ_lines_and_circles(calc, nonFw_track, fw1_track, mtpv_track=None):
+    """绘制等转矩线和等电压椭圆簇"""
     logger.info("="*70)
-    logger.info("绘制等转矩线和等电压椭圆")
+    logger.info("绘制等转矩线和等电压椭圆簇")
     logger.info("="*70)
     
+    NUM_TEM_LINES = 10  # 等转矩线数量（常量）
+    NUM_EQU_U_ELLIPSES = 10  # 等电压椭圆数量（常量）
+
     fig = plt.figure(figsize=(14, 12))
     
     # 计算IsRange
     IsRange = calc.calc_full_track(
-        mtpaTrack=mtpa_track,
+        nonFwTrack=nonFw_track,
         mtpvTrack=mtpv_track,
         fw1Track=fw1_track
     )
@@ -629,16 +738,16 @@ def plot_equ_lines_and_circles(calc, mtpa_track, fw1_track, mtpv_track=None):
         # 生成转速序列（对数分布）
         log_minWe = np.log(minWe)
         log_maxWe = np.log(maxWe)
-        log_We_list = np.linspace(log_minWe, log_maxWe, 10)
+        log_We_list = np.linspace(log_minWe, log_maxWe, NUM_EQU_U_ELLIPSES)
         We_list = np.exp(log_We_list)
         
-        colors_u = plt.cm.get_cmap('cool')(np.linspace(0, 1, len(We_list)))
+        colors_u = plt.colormaps.get_cmap('cool')(np.linspace(0, 1, len(We_list)))
         
         for i, We_target in enumerate(We_list):
             try:
                 equUTrack, Tem_max = calc.calc_equ_u_track(
                     We=We_target,
-                    mtpaTrack=mtpa_track,
+                    nonFwTrack=nonFw_track,
                     fw1Track=fw1_track,
                     mtpvTrack=mtpv_track
                 )
@@ -651,16 +760,17 @@ def plot_equ_lines_and_circles(calc, mtpa_track, fw1_track, mtpv_track=None):
                 logger.warning(f"计算等电压椭圆失败 We={We_target:.0f}: {e}")
     
     # 绘制等转矩线
-    maxTem = mtpa_track[-1, 3]
-    Tem_list = np.linspace(0, maxTem, 15)[1:]
+    maxTem = nonFw_track[-1, 3]
     
-    colors_t = plt.cm.get_cmap('hot')(np.linspace(0, 1, len(Tem_list)))
+    Tem_list = np.linspace(0, maxTem, NUM_TEM_LINES+2)[1:-1]
+    
+    colors_t = plt.colormaps.get_cmap('hot')(np.linspace(0, 1, len(Tem_list)))
     
     for i, Tem_target in enumerate(Tem_list):
         try:
             equTemTrack = calc.calc_equ_tem_track(
                 Tem_target=Tem_target,
-                mtpaTrack=mtpa_track,
+                nonFwTrack=nonFw_track,
                 fw1Track=fw1_track,
                 mtpvTrack=mtpv_track
             )
@@ -692,7 +802,7 @@ def plot_equ_lines_and_circles(calc, mtpa_track, fw1_track, mtpv_track=None):
 # ========================================
 
 def test_operating_point_tracks(calc: PMSMFieldCoupledCalculator, 
-                                mtpa_track: np.ndarray,
+                                nonFw_track: np.ndarray,
                                 fw1_track: np.ndarray,
                                 mtpv_track: np.ndarray):
     """
@@ -700,9 +810,8 @@ def test_operating_point_tracks(calc: PMSMFieldCoupledCalculator,
     """
     logger.info("准备测试用电机参数")
     
-    # 测试工况：转矩500 N·m，转速300 rad/s
-    Tem_target = 500.0   # N·m
-    We_target = 300.0   # rad/s
+    # 获取测试工况参数
+    Tem_target, We_target = TestConfig.get_op_targets(calc.polePairs)
     
     logger.info(f"测试工况点: Tem={Tem_target:.2f} N·m, We={We_target:.2f} rad/s")
     
@@ -710,7 +819,7 @@ def test_operating_point_tracks(calc: PMSMFieldCoupledCalculator,
     IsTrack, equTemTrack, IsTrackInEquU = calc.plot_tracks_for_operating_point(
         Tem_target=Tem_target,
         We_target=We_target,
-        mtpaTrack=mtpa_track,
+        nonFwTrack=nonFw_track,
         fw1Track=fw1_track,
         mtpvTrack=mtpv_track,
         equUPoints=100,
@@ -763,55 +872,59 @@ def test_operating_point_tracks(calc: PMSMFieldCoupledCalculator,
     plt.close()
 
 
-def run_all_tests():
-    """运行所有测试"""
+def run_all_tests(params=None):
+    """
+    运行所有测试
+    
+    Args:
+        params: 电机参数字典，None时使用默认测试参数
+    """
     logger.info("\n" + "="*70)
     logger.info("开始运行完整测试套件")
     logger.info("="*70 + "\n")
     
     # 单元测试
-    test_adaptive_search()
-    test_basic_calculations()
-    id0_track = test_id0_track()
-    mtpa_track = test_mtpa_track()
-    mtpv_track = test_mtpv_track()
+    test_adaptive_search(params)
+    id0_track = test_id0_track(params)
+    mtpa_track = test_mtpa_track(params)
+    mtpv_track = test_mtpv_track(params)
+    if TestConfig.CONTROL_TYPE == 'id0':
+        nonFw_track = id0_track
+    elif TestConfig.CONTROL_TYPE == 'mtpa':
+        nonFw_track = mtpa_track
     
     # 集成测试
-    non_fw_result = test_non_fw_result()
-    fw_result = test_fw_result()
+    non_fw_result = test_non_fw_result(params)
+    fw_result = test_fw_result(params)
     
     # 可视化
-    plot_motor_characteristics()
-    plot_mtpa_track(mtpa_track)
+    plot_motor_characteristics(params)
+    plot_NonFw_track(nonFw_track)
     
     # 计算弱磁轨迹用于可视化
-    calc = create_calculator()
-    if calc.isDemag:
-        fw1_track = calc.calc_fw1_track(mtpaTrack=mtpa_track, mtpvTrack=mtpv_track)
-        IsRange = calc.calc_full_track(
-            mtpaTrack=mtpa_track,
-            mtpvTrack=mtpv_track,
-            fw1Track=fw1_track
-        )
-        plot_current_range(IsRange, mtpa_track, fw1_track, mtpv_track)
-        plot_equ_lines_and_circles(calc, mtpa_track, fw1_track, mtpv_track)
-    else:
-        IsRange = calc.calc_full_track(mtpaTrack=mtpa_track)
-        plot_current_range(IsRange, mtpa_track)
+    calc = create_calculator(params)
+    fw1_track = calc.calc_fw1_track(nonFwTrack=nonFw_track, mtpvTrack=mtpv_track)
+    IsRange = calc.calc_full_track(
+        nonFwTrack=nonFw_track,
+        mtpvTrack=mtpv_track,
+        fw1Track=fw1_track
+    )
+    plot_current_range(IsRange, params)
+    plot_equ_lines_and_circles(calc, nonFw_track, fw1_track, mtpv_track)
     
     # 绘制控制结果
     if non_fw_result:
-        plot_control_result(non_fw_result, "非弱磁MTPA控制策略")
+        plot_control_result(non_fw_result, "非弱磁控制策略")
     
     if fw_result:
-        plot_control_result(fw_result, "弱磁MTPA控制策略")
+        plot_control_result(fw_result, "弱磁控制策略")
     
     # 测试给定工况点的轨迹绘制
     logger.info("="*70)
     logger.info("测试给定工况点的轨迹绘制")
     logger.info("="*70)
     
-    test_operating_point_tracks(calc, mtpa_track, fw1_track, mtpv_track)
+    test_operating_point_tracks(calc, nonFw_track, fw1_track, mtpv_track)
     
     logger.info("\n" + "="*70)
     logger.info("所有测试完成！")
@@ -819,12 +932,11 @@ def run_all_tests():
     logger.info(f"测试结果保存在: {OUTPUT_DIR}/")
     logger.info("\n图表文件:")
     logger.info("  - motor_characteristics.png")
-    logger.info("  - mtpa_track.png")
+    logger.info("  - nonFw_track.png")
     logger.info("  - current_range.png")
     logger.info("  - equ_lines_and_circles.png")
-    logger.info("  - 非弱磁MTPA控制策略.png")
-    if fw_result:
-        logger.info("  - 弱磁MTPA控制策略.png")
+    logger.info("  - 非弱磁控制策略.png")
+    logger.info("  - 弱磁控制策略.png")
     logger.info("  - operating_point_tracks.png")
     logger.info("\n日志文件:")
     logger.info("  - test_log.txt")

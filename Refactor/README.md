@@ -54,14 +54,26 @@ python example_usage.py --folder "G:/path/to/test/folder"
 
 1. **baseParams.csv** - 基本参数（键值对格式）：
 ```csv
-Udc,540
-Imax,300
+Udc,310
+Imax,3.2
 connectType,'Y'
 modulationType,'SVPWM'
-polePairs,4
+polePairs,2
 Lsigma,1.50E-05
-Rs,0.02
+Rs,11.67
+Tem_target,1.0
+rspeed_target,1500.0
+controlType,'mtpa'
 ```
+
+**测试配置参数说明**：
+- `Tem_target`: 测试目标转矩 [N·m]，将应用于所有测试工况
+- `rspeed_target`: 测试目标机械转速 [rpm]，将应用于所有测试工况
+- `controlType`: 控制策略类型，可选 `'id0'` 或 `'mtpa'`（默认 `'mtpa'`）
+  - `'id0'`: id=0控制策略，适用于表贴式PMSM
+  - `'mtpa'`: 最大转矩/电流比控制策略，适用于内置式PMSM（推荐）
+- 这三个参数会自动配置 `TestConfig` 类的所有测试工况（非弱磁、弱磁、工况点测试）
+- 如果不提供这些参数，将使用默认值（转矩500 N·m，转速1000 rpm，控制策略'mtpa'）
 
 2. **psid.csv** - d轴总磁链-id曲线（跳过前4行标题）：
 ```csv
@@ -189,6 +201,8 @@ print(f"工况点: iq={result['givenPoint'][0]:.2f} A, "
 
 ## 运行测试
 
+### 基本测试
+
 ```bash
 # 进入Refactor目录
 cd Refactor
@@ -204,6 +218,49 @@ python test_pmsm_fcc.py
 - `equ_lines_and_circles.png` - 等转矩线和等电压椭圆
 - `非弱磁MTPA控制策略.png` - 非弱磁控制结果
 - `弱磁MTPA控制策略.png` - 弱磁控制结果（如果适用）
+- `operating_point_tracks.png` - 给定工况点轨迹
+
+### 配置测试工况参数
+
+测试工况参数可以通过修改 `TestConfig` 类来配置：
+
+```python
+import test_pmsm_fcc
+
+# 配置控制策略（'id0' 或 'mtpa'）
+test_pmsm_fcc.TestConfig.CONTROL_TYPE = 'mtpa'      # 控制策略类型
+
+# 方式1: 使用电角速度（rad/s）直接设置
+test_pmsm_fcc.TestConfig.NON_FW_TEM_TARGET = 600.0  # 非弱磁目标转矩 [N·m]
+test_pmsm_fcc.TestConfig.NON_FW_WE_TARGET = 250.0   # 非弱磁目标电角速度 [rad/s]
+
+test_pmsm_fcc.TestConfig.FW_TEM_TARGET = 400.0      # 弱磁目标转矩 [N·m]
+test_pmsm_fcc.TestConfig.FW_WE_TARGET = 600.0       # 弱磁目标电角速度 [rad/s]
+
+test_pmsm_fcc.TestConfig.OP_TEM_TARGET = 500.0      # 工况点目标转矩 [N·m]
+test_pmsm_fcc.TestConfig.OP_WE_TARGET = 350.0       # 工况点目标电角速度 [rad/s]
+
+# 方式2: 使用机械转速（rpm）设置（程序会自动转换为电角速度）
+test_pmsm_fcc.TestConfig.NON_FW_N_TARGET = 1000.0   # 非弱磁目标转速 [rpm]
+test_pmsm_fcc.TestConfig.FW_N_TARGET = 2000.0       # 弱磁目标转速 [rpm]
+test_pmsm_fcc.TestConfig.OP_N_TARGET = 1500.0       # 工况点目标转速 [rpm]
+
+# 运行测试
+test_pmsm_fcc.run_all_tests()
+```
+
+**说明**：
+- `CONTROL_TYPE` 可选值：
+  - `'id0'`: id=0控制策略（适用于表贴式PMSM）
+  - `'mtpa'`: 最大转矩/电流比控制策略（适用于内置式PMSM，推荐）
+- 如果设置了 `*_N_TARGET`（机械转速），程序将使用它计算电角速度，忽略对应的 `*_WE_TARGET`
+- 转换公式：`We [rad/s] = n [rpm] × (2π/60) × pole_pairs`
+- 反向转换：`n [rpm] = We [rad/s] × 60 / (2π × pole_pairs)`
+
+**示例**：对于4对极电机
+- 1000 rpm → 418.88 rad/s
+- 2000 rpm → 837.76 rad/s
+- 3000 rpm → 1256.64 rad/s
 
 ## 高级用法
 

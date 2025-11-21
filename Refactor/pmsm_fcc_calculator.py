@@ -105,24 +105,20 @@ class PMSMFieldCoupledCalculator:
         PsiR_vs_id: Optional[np.ndarray] = None,
         PsiD_vs_id: Optional[np.ndarray] = None,
         # 计算常量配置（可选）
-        id0Points: int = 200,
-        mtpaPoints: int = 200,
-        idPointsAtICircle: int = 1000,
+        id0Points: int = 50,
+        mtpaPoints: int = 50,
         deMagidPoints: int = 10,
-        deMagidTol: float = 1e-5,
-        deMagidMaxIter: int = 10,
-        equUPoints: int = 2000,
+        equUPoints: int = 200,
         mtpvWeScanRatio: float = 20,
         mtpvWePoints: int = 200,
         fw1iqPoints: int = 200,
         equTemIsPoints: int = 300,
         equTemPoints: int = 100,
-        equTemTracksNum: int = 30,
         constTemPointsAtNonFW: int = 100,
         constWePointsAtNonFW: int = 100,
         constTemPointsAtFW: int = 200,
         constWePointsAtFW: int = 200,
-        IsSmoothInterp: bool = True,
+        IsSmoothInterp: bool = False,
         logger: Optional[logging.Logger] = None
     ):
         """
@@ -142,17 +138,13 @@ class PMSMFieldCoupledCalculator:
             PsiD_vs_id: d轴总磁链-d轴电流曲线，第1列为id，第2列为PsiD（可选，与PsiR_vs_id二选一）
             id0Points: id=0控制策略iq扫描点数
             mtpaPoints: MTPA曲线扫描点数
-            idPointsAtICircle: 定子电流圆id扫描点数
             deMagidPoints: 去磁电流迭代初始等分数
-            deMagidTol: d轴电流迭代允许误差
-            deMagidMaxIter: d轴电流最大迭代次数
             equUPoints: 等电压椭圆iq扫描点数
             mtpvWeScanRatio: MTPV转速扫描倍数(相对基速，电角速度)
             mtpvWePoints: MTPV转速扫描范围等分点数
             fw1iqPoints: 弱磁I区iq扫描点数
             equTemIsPoints: 指定转矩，计算id、iq的初始等分数
             equTemPoints: 等转矩线扫描点数
-            equTemTracksNum: 等转矩线数量
             constTemPointsAtNonFW: 非弱磁区的恒转矩点数
             constWePointsAtNonFW: 非弱磁区的恒电角速度点数
             constTemPointsAtFW: 弱磁区的恒转矩点数
@@ -189,17 +181,13 @@ class PMSMFieldCoupledCalculator:
         # 保存计算常量
         self.id0Points = id0Points
         self.mtpaPoints = mtpaPoints
-        self.idPointsAtICircle = idPointsAtICircle
         self.deMagidPoints = deMagidPoints
-        self.deMagidTol = deMagidTol
-        self.deMagidMaxIter = deMagidMaxIter
         self.equUPoints = equUPoints
         self.mtpvWeScanRatio = mtpvWeScanRatio
         self.mtpvWePoints = mtpvWePoints
         self.fw1iqPoints = fw1iqPoints
         self.equTemIsPoints = equTemIsPoints
         self.equTemPoints = equTemPoints
-        self.equTemTracksNum = equTemTracksNum
         self.constTemPointsAtNonFW = constTemPointsAtNonFW
         self.constWePointsAtNonFW = constWePointsAtNonFW
         self.constTemPointsAtFW = constTemPointsAtFW
@@ -321,38 +309,55 @@ class PMSMFieldCoupledCalculator:
         x_data: np.ndarray,
         y_data: np.ndarray,
         smooth: Optional[bool] = None
-    ) -> float:
+    ):
         """
         对数据按x排序后再插值
         
         Args:
             x_new: 要插值的新x值
             x_data: 原始x数据（可以是无序的）
-            y_data: 原始y数据
+            y_data: 原始y数据（可以是1D或2D数组）
             smooth: 是否使用光滑插值（三次样条）。None时使用类默认配置
         
         Returns:
-            插值结果
+            插值结果（标量或数组，取决于y_data的维度）
         """
         if smooth is None:
             smooth = self.IsSmoothInterp
         
-        # 按x排序
+        # 按x排序，并去除重复x
         sorted_indices = np.argsort(x_data)
-        x_sorted = x_data[sorted_indices]
-        y_sorted = y_data[sorted_indices]
+        x_sorted_raw = x_data[sorted_indices]
+        y_sorted_raw = y_data[sorted_indices]
+        # 去除重复的x，只保留第一个出现的
+        _, unique_indices = np.unique(x_sorted_raw, return_index=True)
+        x_sorted = x_sorted_raw[unique_indices]
+        y_sorted = y_sorted_raw[unique_indices]
         
-        # 插值
-        if smooth:
-            cs = CubicSpline(x_sorted, y_sorted, bc_type='natural')
-            result = cs(x_new)
+        # 检查y_data的维度
+        if y_sorted.ndim == 1:
+            # 1D数组，直接插值
+            if smooth:
+                cs = CubicSpline(x_sorted, y_sorted, bc_type='natural')
+                result = cs(x_new)
+            else:
+                result = np.interp(x_new, x_sorted, y_sorted)
+            
+            # 转换为标量
+            if isinstance(result, np.ndarray) and result.ndim == 0:
+                return float(result)
+            return result
         else:
-            result = np.interp(x_new, x_sorted, y_sorted)
-        
-        # 转换为标量
-        if isinstance(result, np.ndarray) and result.ndim == 0:
-            return float(result)
-        return result
+            # 2D数组，对每一列分别插值
+            n_cols = y_sorted.shape[1]
+            result = np.zeros(n_cols)
+            for i in range(n_cols):
+                if smooth:
+                    cs = CubicSpline(x_sorted, y_sorted[:, i], bc_type='natural')
+                    result[i] = cs(x_new)
+                else:
+                    result[i] = np.interp(x_new, x_sorted, y_sorted[:, i])
+            return result
     
     def _adaptive_step_search(
         self,
@@ -775,8 +780,9 @@ class PMSMFieldCoupledCalculator:
         iq: float,
         id_min: float,
         id_init: float = 0.0,
-        divisions: int = 10000,
-        maxIter: int = 1000
+        divisions: int = 1000,
+        maxIter: int = 1000,
+        tol: float = 1e-3
     ) -> float:
         """
         指定Tem、iq，计算对应的id
@@ -798,7 +804,7 @@ class PMSMFieldCoupledCalculator:
             divisions=divisions,
             startFrom='right',
             target=0,
-            tol=1e-5*abs(Tem_target),
+            tol=tol,
             maxIter=maxIter
         )
         return id
@@ -809,8 +815,9 @@ class PMSMFieldCoupledCalculator:
         id: float,
         iq_init: float,
         iq_min: float = 0.0,
-        divisions: int = 10000,
-        maxIter: int = 1000
+        divisions: int = 1000,
+        maxIter: int = 1000,
+        tol: float = 1e-3
     ) -> float:
         """
         指定Tem、id，计算对应的iq
@@ -832,9 +839,11 @@ class PMSMFieldCoupledCalculator:
             divisions=divisions,
             startFrom='right',
             target=0,
-            tol=1e-5*abs(Tem_target),
+            tol=tol,
             maxIter=maxIter
         )
+        if not converged or iterations >= maxIter:
+            self.logger.warning(f"iq计算未收敛:iq当前值={iq}, iq_min={iq_min}, iq_init={iq_init}, Tem_target={Tem_target}")
         return iq
     
     # ========================================
@@ -1005,14 +1014,14 @@ class PMSMFieldCoupledCalculator:
     
     def calc_fw1_track(
         self,
-        mtpaTrack: np.ndarray,
+        nonFwTrack: np.ndarray,
         mtpvTrack: Optional[np.ndarray] = None
     ) -> np.ndarray:
         """
         计算弱磁I区的电流轨迹
         
         Args:
-            mtpaTrack: MTPA电流轨迹
+            nonFwTrack: 非弱磁区电流轨迹
             mtpvTrack: MTPV电流轨迹（可选）
         
         Returns:
@@ -1020,7 +1029,7 @@ class PMSMFieldCoupledCalculator:
         """
         self.logger.info(f"开始计算弱磁I区电流轨迹，扫描点数={self.fw1iqPoints}")
         
-        iq_right = mtpaTrack[-1, 0]
+        iq_right = nonFwTrack[-1, 0]
         
         if mtpvTrack is not None:
             iq_left = mtpvTrack[0, 0]
@@ -1042,7 +1051,7 @@ class PMSMFieldCoupledCalculator:
     
     def calc_full_track(
         self,
-        mtpaTrack: np.ndarray,
+        nonFwTrack: np.ndarray,
         mtpvTrack: Optional[np.ndarray] = None,
         fw1Track: Optional[np.ndarray] = None
     ) -> np.ndarray:
@@ -1050,7 +1059,7 @@ class PMSMFieldCoupledCalculator:
         计算完整的电流轨迹
         
         Args:
-            mtpaTrack: MTPA轨迹
+            nonFwTrack: 非弱磁区轨迹
             mtpvTrack: MTPV轨迹（可选）
             fw1Track: 弱磁I区轨迹（可选）
         
@@ -1059,11 +1068,11 @@ class PMSMFieldCoupledCalculator:
         """
         self.logger.info("开始拼接完整电流轨迹")
         
-        if mtpaTrack is None:
-            raise ValueError("mtpaTrack必须提供")
+        if nonFwTrack is None:
+            raise ValueError("nonFwTrack必须提供")
         
         IsRange = []
-        IsRange.extend(mtpaTrack[:, :2])
+        IsRange.extend(nonFwTrack[:, :2])
         
         if fw1Track is not None:
             IsRange.extend(fw1Track[:, :2])
@@ -1079,7 +1088,7 @@ class PMSMFieldCoupledCalculator:
     def calc_equ_tem_track(
         self,
         Tem_target: float,
-        mtpaTrack: np.ndarray,
+        nonFwTrack: np.ndarray,
         fw1Track: np.ndarray,
         mtpvTrack: Optional[np.ndarray] = None
     ) -> np.ndarray:
@@ -1088,7 +1097,7 @@ class PMSMFieldCoupledCalculator:
         
         Args:
             Tem_target: 目标电磁转矩 [N·m]
-            mtpaTrack: MTPA轨迹
+            nonFwTrack: 非弱磁区轨迹
             fw1Track: 弱磁I区轨迹
             mtpvTrack: MTPV轨迹（可选）
         
@@ -1103,10 +1112,10 @@ class PMSMFieldCoupledCalculator:
         if Tem_target > Tem_max:
             raise ValueError(f"目标转矩{Tem_target:.2f} N·m大于最大转矩{Tem_max:.2f} N·m")
         
-        id_mtpa = self._interp_sorted(Tem_target, mtpaTrack[:, 3], mtpaTrack[:, 1])
-        iq_mtpa = self._interp_sorted(Tem_target, mtpaTrack[:, 3], mtpaTrack[:, 0])
+        id_nonFw = self._interp_sorted(Tem_target, nonFwTrack[:, 3], nonFwTrack[:, 1])
+        iq_nonFw = self._interp_sorted(Tem_target, nonFwTrack[:, 3], nonFwTrack[:, 0])
         
-        self.logger.debug(f"MTPA上插值点: iq={iq_mtpa:.2f}, id={id_mtpa:.2f}")
+        self.logger.debug(f"非弱磁区上插值点: iq={iq_nonFw:.2f}, id={id_nonFw:.2f}")
         
         lastPoint = []
         
@@ -1120,15 +1129,15 @@ class PMSMFieldCoupledCalculator:
             
             self.logger.debug(f"左端点在弱磁I区: iq={iq_fw1:.2f}, id={id_fw1:.2f}")
             
-            id_diff = abs(id_mtpa - id_fw1)
-            iq_diff = abs(iq_mtpa - iq_fw1)
+            id_diff = abs(id_nonFw - id_fw1)
+            iq_diff = abs(iq_nonFw - iq_fw1)
             
             if id_diff >= iq_diff:
                 scan_by_id = True
-                id_step = (id_mtpa - id_fw1 * 0.95) / self.equTemPoints
+                id_step = (id_nonFw - id_fw1 * 0.95) / self.equTemPoints
             else:
                 scan_by_id = False
-                iq_step = (iq_mtpa - iq_fw1 * 0.95) / self.equTemPoints
+                iq_step = (iq_nonFw - iq_fw1 * 0.95) / self.equTemPoints
         else:
             minTemAtMtpv = mtpvTrack[-1, 3]
             minidAtMtpv = mtpvTrack[-1, 1]
@@ -1146,24 +1155,24 @@ class PMSMFieldCoupledCalculator:
             
             self.logger.debug(f"左端点在弱磁II区: iq={iq_mtpv:.2f}, id={id_mtpv:.2f}")
             
-            id_diff = abs(id_mtpa - id_mtpv)
-            iq_diff = abs(iq_mtpa - iq_mtpv)
+            id_diff = abs(id_nonFw - id_mtpv)
+            iq_diff = abs(iq_nonFw - iq_mtpv)
             
             if id_diff >= iq_diff:
                 scan_by_id = True
-                id_step = (id_mtpa - id_mtpv * 0.95) / self.equTemPoints
+                id_step = (id_nonFw - id_mtpv * 0.95) / self.equTemPoints
             else:
                 scan_by_id = False
-                iq_step = (iq_mtpa - iq_mtpv * 0.95) / self.equTemPoints
+                iq_step = (iq_nonFw - iq_mtpv * 0.95) / self.equTemPoints
         
         equTemTrack = []
         
         if scan_by_id:
-            iq_init = iq_mtpa * 1.05
+            iq_init = iq_nonFw * 1.05
             
             for i in range(self.equTemPoints + 1):
-                id = id_mtpa - i * id_step
-                iq = self._calc_iq_by_Tem_id(Tem_target, id, iq_init)
+                id = id_nonFw - i * id_step
+                iq = self._calc_iq_by_Tem_id(Tem_target=Tem_target, id=id, iq_init=iq_init, iq_min=lastPoint[0])
                 
                 if iq < 0.0:
                     self.logger.debug(f"iq<0，结束等转矩线计算")
@@ -1186,11 +1195,11 @@ class PMSMFieldCoupledCalculator:
                 equTemTrack.append([iq, id, Is, Tem, We])
                 iq_init = iq
         else:
-            id_init = id_mtpa * 1.05
+            id_init = id_nonFw * 1.05
             
             for i in range(self.equTemPoints + 1):
-                iq = iq_mtpa - i * iq_step
-                id = self._calc_id_by_Tem_iq(Tem_target, iq, -self.IPmax, id_init)
+                iq = iq_nonFw - i * iq_step
+                id = self._calc_id_by_Tem_iq(Tem_target=Tem_target, iq=iq, id_min=lastPoint[1], id_init=id_init)
                 
                 if id > -1e-6:
                     break
@@ -1223,7 +1232,7 @@ class PMSMFieldCoupledCalculator:
     def calc_equ_u_track(
         self,
         We: float,
-        mtpaTrack: np.ndarray,
+        nonFwTrack: np.ndarray,
         fw1Track: np.ndarray,
         mtpvTrack: Optional[np.ndarray] = None,
         splitRatio: int = 5
@@ -1233,7 +1242,7 @@ class PMSMFieldCoupledCalculator:
         
         Args:
             We: 电角速度 [rad/s]
-            mtpaTrack: MTPA轨迹
+            nonFwTrack: 非弱磁区轨迹
             fw1Track: 弱磁I区轨迹
             mtpvTrack: MTPV轨迹（可选）
             splitRatio: 分段比例
@@ -1246,31 +1255,31 @@ class PMSMFieldCoupledCalculator:
         # 列索引定义
         iqIdx, idIdx, IsIdx, temIdx, weIdx = 0, 1, 2, 3, 4
         
-        maxWeAtMtpaTrackEnd = 0
-        if len(mtpaTrack) > 0:
-            id_end = mtpaTrack[-1, idIdx]
-            iq_end = mtpaTrack[-1, iqIdx]
-            maxWeAtMtpaTrackEnd = self._calc_We(id_end, iq_end, self.UPmax)[2]
+        maxWeAtNonFwTrackEnd = 0
+        if len(nonFwTrack) > 0:
+            id_end = nonFwTrack[-1, idIdx]
+            iq_end = nonFwTrack[-1, iqIdx]
+            maxWeAtNonFwTrackEnd = self._calc_We(id_end, iq_end, self.UPmax)[2]
         
-        maxWeAtMtpaTrackStart = 0
-        if len(mtpaTrack) > 0:
-            id_start = mtpaTrack[0, idIdx]
-            iq_start = mtpaTrack[0, iqIdx]
-            maxWeAtMtpaTrackStart = self._calc_We(id_start, iq_start, self.UPmax)[2]
+        maxWeAtNonFwTrackStart = 0
+        if len(nonFwTrack) > 0:
+            id_start = nonFwTrack[0, idIdx]
+            iq_start = nonFwTrack[0, iqIdx]
+            maxWeAtNonFwTrackStart = self._calc_We(id_start, iq_start, self.UPmax)[2]
         
-        self.logger.debug(f"MTPA末端最大转速={maxWeAtMtpaTrackEnd:.2f}, 起点最大转速={maxWeAtMtpaTrackStart:.2f}")
+        self.logger.debug(f"非弱磁区末端最大转速={maxWeAtNonFwTrackEnd:.2f}, 起点最大转速={maxWeAtNonFwTrackStart:.2f}")
         
-        if We <= maxWeAtMtpaTrackEnd:
+        if We <= maxWeAtNonFwTrackEnd:
             self.logger.info("转速过低，返回空轨迹")
             return np.array([]), 0.0
         
         # 确定起点
-        if We <= maxWeAtMtpaTrackStart:
-            We_mtpa = mtpaTrack[:, weIdx] if mtpaTrack.shape[1] > 4 else np.array([mtpaTrack[i, 4] for i in range(len(mtpaTrack))])
-            We_mtpa = We_mtpa[::-1]
-            id_start = self._interp_sorted(We, We_mtpa, mtpaTrack[::-1, idIdx])
-            iq_start = self._interp_sorted(We, We_mtpa, mtpaTrack[::-1, iqIdx])
-            self.logger.debug(f"起点在MTPA内: id={id_start:.2f}, iq={iq_start:.2f}")
+        if We <= maxWeAtNonFwTrackStart:
+            We_nonFw = nonFwTrack[:, weIdx] if nonFwTrack.shape[1] > 4 else np.array([nonFwTrack[i, 4] for i in range(len(nonFwTrack))])
+            We_nonFw = We_nonFw[::-1]
+            id_start = self._interp_sorted(We, We_nonFw, nonFwTrack[::-1, idIdx])
+            iq_start = self._interp_sorted(We, We_nonFw, nonFwTrack[::-1, iqIdx])
+            self.logger.debug(f"起点在非弱磁区内: id={id_start:.2f}, iq={iq_start:.2f}")
         else:
             success_R, msg_R, id_right = self._calc_id(iq=0, We=We, Us=self.UPmax, id_init=self.id_demag, root='R')
             
@@ -1280,7 +1289,7 @@ class PMSMFieldCoupledCalculator:
                 id_start = 0
             
             iq_start = 0
-            self.logger.debug(f"起点在MTPA外: id={id_start:.2f}, iq={iq_start:.2f}")
+            self.logger.debug(f"起点在非弱磁区外: id={id_start:.2f}, iq={iq_start:.2f}")
         
         # 确定终点
         maxWeAtFw1TrackStart = fw1Track[-1, weIdx]
@@ -1388,7 +1397,7 @@ class PMSMFieldCoupledCalculator:
             raise ValueError(f"不支持的控制策略: {controlType}")
         
         # IsRange
-        IsRange = self.calc_full_track(mtpaTrack=nonFwIsTrack, mtpvTrack=None, fw1Track=None)
+        IsRange = self.calc_full_track(nonFwTrack=nonFwIsTrack, mtpvTrack=None, fw1Track=None)
         
         # IsTrackAtMaxCapacity
         nonFwIsTrack_reversed = np.flipud(nonFwIsTrack)
@@ -1543,11 +1552,11 @@ class PMSMFieldCoupledCalculator:
             mtpvTrack = None
             self.logger.info("未发生完全退磁，跳过MTPV轨迹计算")
         
-        fw1Track = self.calc_fw1_track(mtpaTrack=nonFwIsTrack, mtpvTrack=mtpvTrack)
+        fw1Track = self.calc_fw1_track(nonFwTrack=nonFwIsTrack, mtpvTrack=mtpvTrack)
         
         # IsRange
         IsRange = self.calc_full_track(
-            mtpaTrack=nonFwIsTrack,
+            nonFwTrack=nonFwIsTrack,
             mtpvTrack=mtpvTrack,
             fw1Track=fw1Track
         )
@@ -1596,7 +1605,7 @@ class PMSMFieldCoupledCalculator:
         # 计算弱磁段
         equTemTrack_fw = self.calc_equ_tem_track(
             Tem_target=temTargetClamped,
-            mtpaTrack=nonFwIsTrack,
+            nonFwTrack=nonFwIsTrack,
             fw1Track=fw1Track,
             mtpvTrack=mtpvTrack
         )
@@ -1645,7 +1654,7 @@ class PMSMFieldCoupledCalculator:
         # 计算弱磁段
         equWeTrack_fw = self.calc_equ_u_track(
             We=weTargetClamped,
-            mtpaTrack=nonFwIsTrack,
+            nonFwTrack=nonFwIsTrack,
             fw1Track=fw1Track,
             mtpvTrack=mtpvTrack,
             splitRatio=5
@@ -1691,7 +1700,7 @@ class PMSMFieldCoupledCalculator:
             'givenPoint': givenPoint
         }
     
-    def calc_equ_torque_track(self, Tem_target: float, mtpaTrack: np.ndarray, 
+    def calc_equ_torque_track(self, Tem_target: float, nonFwTrack: np.ndarray, 
                               fw1Track: np.ndarray, mtpvTrack: Optional[np.ndarray] = None,
                               equTemPoints: int = 50) -> np.ndarray:
         """
@@ -1699,7 +1708,7 @@ class PMSMFieldCoupledCalculator:
         
         参数:
             Tem_target: 目标电磁转矩 (N·m)
-            mtpaTrack: MTPA轨迹 (N×4)，格式：[[iq0, id0, Is0, Tem0], ...]
+            nonFwTrack: 非弱磁区轨迹 (N×4)，格式：[[iq0, id0, Is0, Tem0], ...]
             fw1Track: 弱磁I区轨迹 (N×5)，格式：[[iq0, id0, Is0, Tem0, We0], ...]
             mtpvTrack: MTPV轨迹 (N×5)，可选，格式：[[iq0, id0, Is0, Tem0, We0], ...]
             equTemPoints: 等转矩点数
@@ -1717,10 +1726,10 @@ class PMSMFieldCoupledCalculator:
         if Tem_target > Tem_max:
             raise ValueError(f"目标转矩{Tem_target:.2f} N·m大于最大转矩{Tem_max:.2f} N·m")
         
-        # 在MTPA上查找对应的id_mtpa和iq_mtpa
-        id_mtpa = self._interp_sorted(Tem_target, mtpaTrack[:, 3], mtpaTrack[:, 1])
-        iq_mtpa = self._interp_sorted(Tem_target, mtpaTrack[:, 3], mtpaTrack[:, 0])
-        self.logger.debug(f"MTPA点: iq_mtpa={iq_mtpa:.2f} A, id_mtpa={id_mtpa:.2f} A")
+        # 在非弱磁区上查找对应的id_nonFw和iq_nonFw
+        id_nonFw = self._interp_sorted(Tem_target, nonFwTrack[:, 3], nonFwTrack[:, 1])
+        iq_nonFw = self._interp_sorted(Tem_target, nonFwTrack[:, 3], nonFwTrack[:, 0])
+        self.logger.debug(f"非弱磁区点: iq_nonFw={iq_nonFw:.2f} A, id_nonFw={id_nonFw:.2f} A")
         
         lastPoint = []
         
@@ -1736,16 +1745,16 @@ class PMSMFieldCoupledCalculator:
             self.logger.debug(f"左端点在弱磁I区: iq={iq_fw1:.2f} A, id={id_fw1:.2f} A")
             
             # 判断扫描变量
-            id_diff = abs(id_mtpa - id_fw1)
-            iq_diff = abs(iq_mtpa - iq_fw1)
+            id_diff = abs(id_nonFw - id_fw1)
+            iq_diff = abs(iq_nonFw - iq_fw1)
             
             if id_diff >= iq_diff:
                 scan_by_id = True
-                id_step = (id_mtpa - id_fw1 * 0.95) / equTemPoints
+                id_step = (id_nonFw - id_fw1 * 0.95) / equTemPoints
                 self.logger.debug(f"选择id作为扫描变量, step={id_step:.2f} A")
             else:
                 scan_by_id = False
-                iq_step = (iq_mtpa - iq_fw1 * 0.95) / equTemPoints
+                iq_step = (iq_nonFw - iq_fw1 * 0.95) / equTemPoints
                 self.logger.debug(f"选择iq作为扫描变量, step={iq_step:.2f} A")
         else:
             # 左端点在弱磁II区
@@ -1766,16 +1775,16 @@ class PMSMFieldCoupledCalculator:
                 self.logger.debug(f"左端点在弱磁II区: iq={iq_mtpv:.2f}, id={id_mtpv:.2f}")
             
             # 判断扫描变量
-            id_diff = abs(id_mtpa - id_mtpv)
-            iq_diff = abs(iq_mtpa - iq_mtpv)
+            id_diff = abs(id_nonFw - id_mtpv)
+            iq_diff = abs(iq_nonFw - iq_mtpv)
             
             if id_diff >= iq_diff:
                 scan_by_id = True
-                id_step = (id_mtpa - id_mtpv * 0.95) / equTemPoints
+                id_step = (id_nonFw - id_mtpv * 0.95) / equTemPoints
                 self.logger.debug(f"选择id作为扫描变量, step={id_step:.2f} A")
             else:
                 scan_by_id = False
-                iq_step = (iq_mtpa - iq_mtpv * 0.95) / equTemPoints
+                iq_step = (iq_nonFw - iq_mtpv * 0.95) / equTemPoints
                 self.logger.debug(f"选择iq作为扫描变量, step={iq_step:.2f} A")
         
         # 初始化等转矩轨迹列表
@@ -1784,10 +1793,10 @@ class PMSMFieldCoupledCalculator:
         # 根据扫描变量进行迭代
         if scan_by_id:
             # id作为扫描变量
-            iq_init = iq_mtpa * 1.05
+            iq_init = iq_nonFw * 1.05
             
             for i in range(equTemPoints + 1):
-                id = id_mtpa - i * id_step
+                id = id_nonFw - i * id_step
                 iq = self._calc_iq_by_Tem_id(Tem_target, id, iq_init)
                 
                 if iq < 0.0:
@@ -1808,10 +1817,10 @@ class PMSMFieldCoupledCalculator:
                 iq_init = iq
         else:
             # iq作为扫描变量
-            id_init = id_mtpa * 1.05
+            id_init = id_nonFw * 1.05
             
             for i in range(equTemPoints + 1):
-                iq = iq_mtpa - i * iq_step
+                iq = iq_nonFw - i * iq_step
                 id = self._calc_id_by_Tem_iq(Tem_target, iq, id_init, -self.IPmax)
                 
                 if id < -self.IPmax:
@@ -1840,7 +1849,7 @@ class PMSMFieldCoupledCalculator:
         
         return result
     
-    def calc_equ_voltage_track(self, We: float, mtpaTrack: np.ndarray, fw1Track: np.ndarray,
+    def calc_equ_voltage_track(self, We: float, nonFwTrack: np.ndarray, fw1Track: np.ndarray,
                                mtpvTrack: Optional[np.ndarray] = None,
                                equUPoints: int = 100, splitRatio: int = 5) -> tuple[np.ndarray, float]:
         """
@@ -1848,7 +1857,7 @@ class PMSMFieldCoupledCalculator:
         
         参数:
             We: 电角速度 (rad/s)
-            mtpaTrack: MTPA轨迹 (N×4)，格式：[[iq0, id0, Is0, Tem0], ...]
+            nonFwTrack: 非弱磁区轨迹 (N×4)，格式：[[iq0, id0, Is0, Tem0], ...]
             fw1Track: 弱磁I区轨迹 (N×5)，格式：[[iq0, id0, Is0, Tem0, We0], ...]
             mtpvTrack: MTPV轨迹 (N×5)，可选
             equUPoints: 等电压椭圆扫描点数
@@ -1860,41 +1869,41 @@ class PMSMFieldCoupledCalculator:
         self.logger.info(f"开始计算等电压椭圆，转速={We:.2f} rad/s")
         
         # 步骤1：转速范围判断
-        maxWeAtMtpaTrackEnd = 0
-        if len(mtpaTrack) > 0:
-            id_end = mtpaTrack[-1, 1]
-            iq_end = mtpaTrack[-1, 0]
-            _, _, maxWeAtMtpaTrackEnd = self._calc_We(id_end, iq_end, self.UPmax)
+        maxWeAtNonFwTrackEnd = 0
+        if len(nonFwTrack) > 0:
+            id_end = nonFwTrack[-1, 1]
+            iq_end = nonFwTrack[-1, 0]
+            _, _, maxWeAtNonFwTrackEnd = self._calc_We(id_end, iq_end, self.UPmax)
         
-        maxWeAtMtpaTrackStart = 0
-        if len(mtpaTrack) > 0:
-            id_start_mtpa = mtpaTrack[0, 1]
-            iq_start_mtpa = mtpaTrack[0, 0]
-            _, _, maxWeAtMtpaTrackStart = self._calc_We(id_start_mtpa, iq_start_mtpa, self.UPmax)
+        maxWeAtNonFwTrackStart = 0
+        if len(nonFwTrack) > 0:
+            id_start_nonFw = nonFwTrack[0, 1]
+            iq_start_nonFw = nonFwTrack[0, 0]
+            _, _, maxWeAtNonFwTrackStart = self._calc_We(id_start_nonFw, iq_start_nonFw, self.UPmax)
         
-        self.logger.debug(f"MTPA末端最大转速={maxWeAtMtpaTrackEnd:.2f} rad/s")
-        self.logger.debug(f"MTPA起点最大转速={maxWeAtMtpaTrackStart:.2f} rad/s")
+        self.logger.debug(f"非弱磁区末端最大转速={maxWeAtNonFwTrackEnd:.2f} rad/s")
+        self.logger.debug(f"非弱磁区起点最大转速={maxWeAtNonFwTrackStart:.2f} rad/s")
         
-        if We <= maxWeAtMtpaTrackEnd:
+        if We <= maxWeAtNonFwTrackEnd:
             self.logger.info("转速过低，等电压椭圆在电流控制范围外")
             return np.array([]), 0.0
         
         # 步骤2：确定轨迹起点
-        if We <= maxWeAtMtpaTrackStart:
-            # 等电压椭圆与MTPA轨迹相交
-            self.logger.debug("起点在MTPA轨迹内")
-            # 计算MTPA轨迹的We值
-            We_mtpa = np.array([self._calc_We(mtpaTrack[i, 1], mtpaTrack[i, 0], self.UPmax)[2] 
-                               for i in range(len(mtpaTrack))])
-            # We_mtpa从大到小排序，需要反转
-            We_mtpa_sorted = We_mtpa[::-1]
-            mtpa_reversed = mtpaTrack[::-1]
-            id_start = self._interp_sorted(We, We_mtpa_sorted, mtpa_reversed[:, 1])
-            iq_start = self._interp_sorted(We, We_mtpa_sorted, mtpa_reversed[:, 0])
+        if We <= maxWeAtNonFwTrackStart:
+            # 等电压椭圆与非弱磁区轨迹相交
+            self.logger.debug("起点在非弱磁区轨迹内")
+            # 计算非弱磁区轨迹的We值
+            We_nonFw = np.array([self._calc_We(nonFwTrack[i, 1], nonFwTrack[i, 0], self.UPmax)[2] 
+                               for i in range(len(nonFwTrack))])
+            # We_nonFw从大到小排序，需要反转
+            We_nonFw_sorted = We_nonFw[::-1]
+            nonFw_reversed = nonFwTrack[::-1]
+            id_start = self._interp_sorted(We, We_nonFw_sorted, nonFw_reversed[:, 1])
+            iq_start = self._interp_sorted(We, We_nonFw_sorted, nonFw_reversed[:, 0])
             self.logger.debug(f"插值得到起点: id={id_start:.2f}, iq={iq_start:.2f}")
         else:
-            # 等电压椭圆在MTPA轨迹外侧
-            self.logger.debug("起点在MTPA轨迹外侧")
+            # 等电压椭圆在非弱磁区轨迹外侧
+            self.logger.debug("起点在非弱磁区轨迹外侧")
             success_R, _, id_right = self._calc_id(iq=0, We=We, Us=self.UPmax, 
                                                    id_init=self.id_demag, root='R')
             if success_R:
@@ -1991,7 +2000,7 @@ class PMSMFieldCoupledCalculator:
         return IsTrackInEquU, Tem_max
     
     def plot_tracks_for_operating_point(self, Tem_target: float, We_target: float,
-                                        mtpaTrack: np.ndarray, fw1Track: np.ndarray, 
+                                        nonFwTrack: np.ndarray, fw1Track: np.ndarray, 
                                         mtpvTrack: Optional[np.ndarray] = None,
                                         equUPoints: int = 100, equTemPoints: int = 50) -> tuple:
         """
@@ -2000,7 +2009,7 @@ class PMSMFieldCoupledCalculator:
         参数:
             Tem_target: 目标转矩 (N·m)
             We_target: 目标电角速度 (rad/s)
-            mtpaTrack: MTPA轨迹
+            nonFwTrack: 非弱磁区轨迹
             fw1Track: 弱磁I区轨迹
             mtpvTrack: MTPV轨迹（可选）
             equUPoints: 等电压椭圆扫描点数
@@ -2013,20 +2022,20 @@ class PMSMFieldCoupledCalculator:
         
         # 步骤1：获取完整的电流容量边界 IsTrack
         self.logger.debug("步骤1: 获取完整电流容量边界")
-        mtpa_part = mtpaTrack[:, :2]  # [iq, id]
+        nonFw_part = nonFwTrack[:, :2]  # [iq, id]
         fw1_part = fw1Track[:, :2]
         if mtpvTrack is not None and len(mtpvTrack) > 0:
             mtpv_part = mtpvTrack[:, :2]
-            IsTrack = np.vstack([mtpa_part, fw1_part, mtpv_part])
+            IsTrack = np.vstack([nonFw_part, fw1_part, mtpv_part])
         else:
-            IsTrack = np.vstack([mtpa_part, fw1_part])
+            IsTrack = np.vstack([nonFw_part, fw1_part])
         self.logger.debug(f"IsTrack点数: {len(IsTrack)}")
         
         # 步骤2：计算等转矩线
         self.logger.debug(f"步骤2: 计算等转矩线 (Tem={Tem_target:.2f} N·m)")
         equTemTrack = self.calc_equ_torque_track(
             Tem_target=Tem_target,
-            mtpaTrack=mtpaTrack,
+            nonFwTrack=nonFwTrack,
             fw1Track=fw1Track,
             mtpvTrack=mtpvTrack,
             equTemPoints=equTemPoints
@@ -2037,7 +2046,7 @@ class PMSMFieldCoupledCalculator:
         self.logger.debug(f"步骤3: 计算等电压椭圆 (We={We_target:.2f} rad/s)")
         IsTrackInEquU, Tem_max_at_We = self.calc_equ_voltage_track(
             We=We_target,
-            mtpaTrack=mtpaTrack,
+            nonFwTrack=nonFwTrack,
             fw1Track=fw1Track,
             mtpvTrack=mtpvTrack,
             equUPoints=equUPoints
