@@ -203,7 +203,7 @@ def setup_logging(output_dir: str = None):
     # 仅文件处理器，不再添加控制台处理器
     log_file = os.path.join(OUTPUT_DIR, 'test_log.txt')
     file_handler = logging.FileHandler(log_file, mode='w', encoding='utf-8')
-    file_handler.setLevel(logging.INFO)
+    file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
     # 添加文件处理器
@@ -212,7 +212,7 @@ def setup_logging(output_dir: str = None):
     # 同时配置pmsm_fcc_calculator的日志
     calc_logger = logging.getLogger('pmsm_fcc_calculator')
     calc_logger.handlers.clear()
-    calc_logger.setLevel(logging.INFO)
+    calc_logger.setLevel(logging.DEBUG)
     calc_logger.addHandler(file_handler)
     
     logger.info(f"创建输出文件夹: {OUTPUT_DIR}")
@@ -704,7 +704,7 @@ def plot_equ_lines_and_circles(calc, nonFw_track, fw1_track, mtpv_track=None):
     logger.info("绘制等转矩线和等电压椭圆簇")
     logger.info("="*70)
     
-    NUM_TEM_LINES = 10  # 等转矩线数量（常量）
+    NUM_TEM_LINES = 20  # 等转矩线数量（常量）
     NUM_EQU_U_ELLIPSES = 10  # 等电压椭圆数量（常量）
 
     fig = plt.figure(figsize=(14, 12))
@@ -727,7 +727,7 @@ def plot_equ_lines_and_circles(calc, nonFw_track, fw1_track, mtpv_track=None):
     plt.plot(id_circle, iq_circle, 'k--', linewidth=1.5, alpha=0.6,
              label=f'电流限制圈 (Is={calc.IPmax:.0f}A)')
     
-    # 绘制等电压椭圆
+    # 绘制等电压椭圆簇
     if len(fw1_track) > 0:
         minWe = fw1_track[0, 4]
         if mtpv_track is not None and len(mtpv_track) > 0:
@@ -759,7 +759,7 @@ def plot_equ_lines_and_circles(calc, nonFw_track, fw1_track, mtpv_track=None):
             except Exception as e:
                 logger.warning(f"计算等电压椭圆失败 We={We_target:.0f}: {e}")
     
-    # 绘制等转矩线
+    # 绘制等转矩线簇
     maxTem = nonFw_track[-1, 3]
     
     Tem_list = np.linspace(0, maxTem, NUM_TEM_LINES+2)[1:-1]
@@ -781,7 +781,7 @@ def plot_equ_lines_and_circles(calc, nonFw_track, fw1_track, mtpv_track=None):
                          label=f'等转矩线 {Tem_target:.0f} N·m' if i % 2 == 0 else '')
         except Exception as e:
             logger.warning(f"计算等转矩线失败 Tem={Tem_target:.0f}: {e}")
-    
+
     plt.xlabel('id (A)', fontsize=12)
     plt.ylabel('iq (A)', fontsize=12)
     plt.title('永磁同步电机电流轨迹示意图', fontsize=14)

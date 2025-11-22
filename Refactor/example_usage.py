@@ -27,6 +27,8 @@ import argparse
 import numpy as np
 import logging
 
+EXAMPLE_FOLDER = "ExternalValidation/example1"  # 默认测试文件夹
+
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
@@ -159,7 +161,7 @@ def main(test_folder_path: str = None):
     if test_folder_path is None:
         # 默认路径：相对于当前脚本的位置
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        test_folder_path = os.path.join(script_dir, "..", "ExternalValidation", "example1")
+        test_folder_path = os.path.join(script_dir, "..", EXAMPLE_FOLDER)
     
     test_folder_path = os.path.abspath(test_folder_path)
     logger.info(f"\n测试文件夹: {test_folder_path}")

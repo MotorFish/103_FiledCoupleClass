@@ -1,0 +1,977 @@
+2025-11-22 15:17:42,098 - INFO - [test_pmsm_fcc.py:218] - 创建输出文件夹: g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results
+2025-11-22 15:17:42,098 - INFO - [test_pmsm_fcc.py:219] - 日志将保存到: g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\test_log.txt
+2025-11-22 15:17:42,102 - INFO - [test_pmsm_fcc.py:882] - 
+======================================================================
+2025-11-22 15:17:42,102 - INFO - [test_pmsm_fcc.py:883] - 开始运行完整测试套件
+2025-11-22 15:17:42,102 - INFO - [test_pmsm_fcc.py:884] - ======================================================================
+
+2025-11-22 15:17:42,102 - INFO - [test_pmsm_fcc.py:373] - ======================================================================
+2025-11-22 15:17:42,102 - INFO - [test_pmsm_fcc.py:374] - 测试自适应搜索算法
+2025-11-22 15:17:42,102 - INFO - [test_pmsm_fcc.py:375] - ======================================================================
+2025-11-22 15:17:42,103 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:42,103 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:42,104 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:42,104 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:42,105 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:42,105 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:42,105 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=-2.000000, fx=0.000000, 迭代41次
+2025-11-22 15:17:42,105 - INFO - [test_pmsm_fcc.py:392] - 求根测试: x=-2.000000, f(x)=0.00000000, 迭代41次, 收敛=True
+2025-11-22 15:17:42,105 - INFO - [test_pmsm_fcc.py:408] - 求极大值测试: x=2.055550, f(x)=10.000000, 迭代65次, 收敛=True
+2025-11-22 15:17:42,106 - INFO - [test_pmsm_fcc.py:412] - ✓ 自适应搜索算法测试通过
+
+2025-11-22 15:17:42,106 - INFO - [test_pmsm_fcc.py:302] - ======================================================================
+2025-11-22 15:17:42,106 - INFO - [test_pmsm_fcc.py:303] - 测试id=0控制轨迹
+2025-11-22 15:17:42,106 - INFO - [test_pmsm_fcc.py:304] - ======================================================================
+2025-11-22 15:17:42,106 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:42,107 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:42,107 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:42,107 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:42,108 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:42,108 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:42,108 - INFO - [pmsm_fcc_calculator.py:863] - 开始计算id=0电流轨迹，扫描点数=50
+2025-11-22 15:17:42,109 - INFO - [pmsm_fcc_calculator.py:884] - 基速自动获取为1138.84 rad/s
+2025-11-22 15:17:42,110 - INFO - [pmsm_fcc_calculator.py:885] - id=0电流轨迹计算完成，轨迹点数=51
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:309] - id=0轨迹点数: 51
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:310] - 最大转矩: 20.48 N·m
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:311] - 最大电流: 130.00 A
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:316] - ✓ id=0控制轨迹测试通过
+
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:322] - ======================================================================
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:323] - 测试MTPA控制轨迹
+2025-11-22 15:17:42,110 - INFO - [test_pmsm_fcc.py:324] - ======================================================================
+2025-11-22 15:17:42,111 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:42,111 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:42,112 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:42,112 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:42,112 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:42,113 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:42,113 - INFO - [pmsm_fcc_calculator.py:896] - 开始计算MTPA电流轨迹，扫描点数=50
+2025-11-22 15:17:42,129 - INFO - [pmsm_fcc_calculator.py:937] - 基速自动获取为1286.29 rad/s
+2025-11-22 15:17:42,129 - INFO - [pmsm_fcc_calculator.py:938] - MTPA电流轨迹计算完成，轨迹点数=51, 最大转矩=22.28 N·m
+2025-11-22 15:17:42,130 - INFO - [test_pmsm_fcc.py:329] - MTPA轨迹点数: 51
+2025-11-22 15:17:42,130 - INFO - [test_pmsm_fcc.py:330] - 最大转矩: 22.28 N·m
+2025-11-22 15:17:42,130 - INFO - [test_pmsm_fcc.py:331] - 最大电流: 130.00 A
+2025-11-22 15:17:42,130 - INFO - [test_pmsm_fcc.py:336] - ✓ MTPA控制轨迹测试通过
+
+2025-11-22 15:17:42,130 - INFO - [test_pmsm_fcc.py:342] - ======================================================================
+2025-11-22 15:17:42,130 - INFO - [test_pmsm_fcc.py:343] - 测试MTPV控制轨迹
+2025-11-22 15:17:42,131 - INFO - [test_pmsm_fcc.py:344] - ======================================================================
+2025-11-22 15:17:42,131 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:42,131 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:42,132 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:42,132 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:42,133 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:42,133 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:42,133 - WARNING - [test_pmsm_fcc.py:349] - 未发生完全退磁，跳过MTPV测试
+2025-11-22 15:17:42,133 - INFO - [test_pmsm_fcc.py:421] - ======================================================================
+2025-11-22 15:17:42,134 - INFO - [test_pmsm_fcc.py:422] - 测试非弱磁控制结果生成
+2025-11-22 15:17:42,134 - INFO - [test_pmsm_fcc.py:423] - ======================================================================
+2025-11-22 15:17:42,134 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:42,135 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:42,135 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:42,135 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:42,136 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:42,136 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:42,136 - INFO - [test_pmsm_fcc.py:104] - 非弱磁测试: 使用机械转速 5000.0 rpm -> 电角速度 2094.40 rad/s
+2025-11-22 15:17:42,136 - INFO - [test_pmsm_fcc.py:435] - 使用控制策略: mtpa
+2025-11-22 15:17:42,136 - INFO - [test_pmsm_fcc.py:436] - 使用负载类型: constTem
+2025-11-22 15:17:42,136 - INFO - [pmsm_fcc_calculator.py:1390] - 开始生成非弱磁控制结果: 策略=mtpa, Tem=4.00, We=2094.40, 负载=constTem
+2025-11-22 15:17:42,137 - INFO - [pmsm_fcc_calculator.py:896] - 开始计算MTPA电流轨迹，扫描点数=50
+2025-11-22 15:17:42,151 - INFO - [pmsm_fcc_calculator.py:937] - 基速自动获取为1286.29 rad/s
+2025-11-22 15:17:42,151 - INFO - [pmsm_fcc_calculator.py:938] - MTPA电流轨迹计算完成，轨迹点数=51, 最大转矩=22.28 N·m
+2025-11-22 15:17:42,151 - INFO - [pmsm_fcc_calculator.py:1072] - 开始拼接完整电流轨迹
+2025-11-22 15:17:42,152 - INFO - [pmsm_fcc_calculator.py:1087] - 完整电流轨迹拼接完成，总点数=51
+2025-11-22 15:17:42,154 - INFO - [pmsm_fcc_calculator.py:896] - 开始计算MTPA电流轨迹，扫描点数=50
+2025-11-22 15:17:42,168 - INFO - [pmsm_fcc_calculator.py:938] - MTPA电流轨迹计算完成，轨迹点数=51, 最大转矩=22.28 N·m
+2025-11-22 15:17:42,169 - INFO - [pmsm_fcc_calculator.py:1479] - 恒转矩负载，目标转速超出最大转速
+2025-11-22 15:17:42,169 - INFO - [pmsm_fcc_calculator.py:1499] - 非弱磁控制结果生成完成
+2025-11-22 15:17:42,169 - INFO - [test_pmsm_fcc.py:446] - IsRange点数: 51
+2025-11-22 15:17:42,169 - INFO - [test_pmsm_fcc.py:447] - IsTrackAtMaxCapacity点数: 150
+2025-11-22 15:17:42,170 - INFO - [test_pmsm_fcc.py:448] - equTemTrack点数: 100
+2025-11-22 15:17:42,170 - INFO - [test_pmsm_fcc.py:449] - equWeTrack点数: 0
+2025-11-22 15:17:42,170 - INFO - [test_pmsm_fcc.py:450] - givenPoint: iq=25.08, id=-2.77, Tem=4.00, We=1561.60
+2025-11-22 15:17:42,171 - INFO - [test_pmsm_fcc.py:459] - ✓ 非弱磁控制结果生成测试通过
+
+2025-11-22 15:17:42,171 - INFO - [test_pmsm_fcc.py:465] - ======================================================================
+2025-11-22 15:17:42,171 - INFO - [test_pmsm_fcc.py:466] - 测试弱磁控制结果生成
+2025-11-22 15:17:42,171 - INFO - [test_pmsm_fcc.py:467] - ======================================================================
+2025-11-22 15:17:42,171 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:42,172 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:42,172 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:42,172 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:42,173 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:42,173 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:42,173 - INFO - [test_pmsm_fcc.py:128] - 弱磁测试: 使用机械转速 5000.0 rpm -> 电角速度 2094.40 rad/s
+2025-11-22 15:17:42,173 - INFO - [test_pmsm_fcc.py:479] - 使用控制策略: mtpa
+2025-11-22 15:17:42,174 - INFO - [test_pmsm_fcc.py:480] - 使用负载类型: constTem
+2025-11-22 15:17:42,174 - INFO - [pmsm_fcc_calculator.py:1537] - 开始生成弱磁控制结果: 策略=mtpa, Tem=4.00, We=2094.40, 负载=constTem
+2025-11-22 15:17:42,174 - INFO - [pmsm_fcc_calculator.py:896] - 开始计算MTPA电流轨迹，扫描点数=50
+2025-11-22 15:17:42,189 - INFO - [pmsm_fcc_calculator.py:937] - 基速自动获取为1286.29 rad/s
+2025-11-22 15:17:42,189 - INFO - [pmsm_fcc_calculator.py:938] - MTPA电流轨迹计算完成，轨迹点数=51, 最大转矩=22.28 N·m
+2025-11-22 15:17:42,190 - INFO - [pmsm_fcc_calculator.py:1557] - 未发生完全退磁，跳过MTPV轨迹计算
+2025-11-22 15:17:42,190 - INFO - [pmsm_fcc_calculator.py:1033] - 开始计算弱磁I区电流轨迹，扫描点数=200
+2025-11-22 15:17:42,195 - INFO - [pmsm_fcc_calculator.py:1051] - 弱磁I区电流轨迹计算完成，轨迹点数=200
+2025-11-22 15:17:42,196 - INFO - [pmsm_fcc_calculator.py:1072] - 开始拼接完整电流轨迹
+2025-11-22 15:17:42,196 - INFO - [pmsm_fcc_calculator.py:1087] - 完整电流轨迹拼接完成，总点数=251
+2025-11-22 15:17:42,197 - INFO - [pmsm_fcc_calculator.py:1110] - 开始计算等转矩线，目标转矩=4.00 N·m
+2025-11-22 15:17:42,198 - DEBUG - [pmsm_fcc_calculator.py:1121] - 非弱磁区上插值点: iq=25.08, id=-2.77
+2025-11-22 15:17:42,199 - DEBUG - [pmsm_fcc_calculator.py:1133] - 左端点在弱磁I区: iq=16.19, id=-128.99
+2025-11-22 15:17:42,202 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=25.097336, fx=0.002597, 迭代123次
+2025-11-22 15:17:42,204 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.963720, fx=0.003585, 迭代16次
+2025-11-22 15:17:42,204 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.823334, fx=0.003194, 迭代17次
+2025-11-22 15:17:42,206 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.685195, fx=0.002873, 迭代17次
+2025-11-22 15:17:42,206 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.549266, fx=0.002630, 迭代17次
+2025-11-22 15:17:42,207 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.423871, fx=0.003838, 迭代16次
+2025-11-22 15:17:42,207 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.292123, fx=0.003748, 迭代17次
+2025-11-22 15:17:42,208 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.162483, fx=0.003748, 迭代17次
+2025-11-22 15:17:42,209 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.034917, fx=0.003838, 迭代17次
+2025-11-22 15:17:42,209 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.901547, fx=0.002708, 迭代18次
+2025-11-22 15:17:42,210 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.778156, fx=0.002999, 迭代17次
+2025-11-22 15:17:42,211 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.656740, fx=0.003384, 迭代17次
+2025-11-22 15:17:42,211 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.537266, fx=0.003866, 迭代17次
+2025-11-22 15:17:42,212 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.412356, fx=0.003191, 迭代18次
+2025-11-22 15:17:42,212 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.296792, fx=0.003885, 迭代17次
+2025-11-22 15:17:42,213 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.175970, fx=0.003454, 迭代18次
+2025-11-22 15:17:42,213 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.057202, fx=0.003155, 迭代18次
+2025-11-22 15:17:42,213 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.940454, fx=0.002988, 迭代18次
+2025-11-22 15:17:42,214 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.825689, fx=0.002956, 迭代18次
+2025-11-22 15:17:42,214 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.712876, fx=0.003058, 迭代18次
+2025-11-22 15:17:42,214 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.601981, fx=0.003295, 迭代18次
+2025-11-22 15:17:42,215 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.492971, fx=0.003666, 迭代18次
+2025-11-22 15:17:42,215 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.379511, fx=0.003046, 迭代19次
+2025-11-22 15:17:42,216 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.274282, fx=0.003696, 迭代18次
+2025-11-22 15:17:42,217 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.164759, fx=0.003380, 迭代19次
+2025-11-22 15:17:42,217 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.057206, fx=0.003221, 迭代19次
+2025-11-22 15:17:42,218 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.951590, fx=0.003218, 迭代19次
+2025-11-22 15:17:42,218 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.847874, fx=0.003370, 迭代19次
+2025-11-22 15:17:42,219 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.746026, fx=0.003675, 迭代19次
+2025-11-22 15:17:42,219 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.640454, fx=0.003110, 迭代20次
+2025-11-22 15:17:42,220 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.542339, fx=0.003736, 迭代19次
+2025-11-22 15:17:42,220 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.440637, fx=0.003520, 迭代20次
+2025-11-22 15:17:42,221 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.340868, fx=0.003484, 迭代20次
+2025-11-22 15:17:42,222 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.242994, fx=0.003627, 迭代20次
+2025-11-22 15:17:42,222 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.146980, fx=0.003949, 迭代20次
+2025-11-22 15:17:42,223 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.047833, fx=0.003509, 迭代21次
+2025-11-22 15:17:42,224 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.950669, fx=0.003272, 迭代21次
+2025-11-22 15:17:42,224 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.855448, fx=0.003237, 迭代21次
+2025-11-22 15:17:42,225 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.762131, fx=0.003401, 迭代21次
+2025-11-22 15:17:42,226 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.670681, fx=0.003762, 迭代21次
+2025-11-22 15:17:42,226 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.576579, fx=0.003450, 迭代22次
+2025-11-22 15:17:42,227 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.484453, fx=0.003358, 迭代22次
+2025-11-22 15:17:42,227 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.394261, fx=0.003485, 迭代22次
+2025-11-22 15:17:42,228 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.305964, fx=0.003828, 迭代22次
+2025-11-22 15:17:42,228 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.215404, fx=0.003572, 迭代23次
+2025-11-22 15:17:42,229 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.126837, fx=0.003554, 迭代23次
+2025-11-22 15:17:42,229 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.040219, fx=0.003771, 迭代23次
+2025-11-22 15:17:42,230 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.951655, fx=0.003451, 迭代24次
+2025-11-22 15:17:42,231 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.865128, fx=0.003387, 迭代24次
+2025-11-22 15:17:42,231 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.780591, fx=0.003577, 迭代24次
+2025-11-22 15:17:42,232 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.694408, fx=0.003288, 迭代25次
+2025-11-22 15:17:42,232 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.613798, fx=0.003985, 迭代24次
+2025-11-22 15:17:42,233 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.528194, fx=0.003524, 迭代26次
+2025-11-22 15:17:42,234 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.444729, fx=0.003356, 迭代26次
+2025-11-22 15:17:42,235 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.363352, fx=0.003475, 迭代26次
+2025-11-22 15:17:42,236 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.284008, fx=0.003876, 迭代26次
+2025-11-22 15:17:42,236 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.203554, fx=0.003910, 迭代27次
+2025-11-22 15:17:42,237 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.122178, fx=0.003616, 迭代28次
+2025-11-22 15:17:42,237 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.042999, fx=0.003642, 迭代28次
+2025-11-22 15:17:42,238 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.965958, fx=0.003984, 迭代28次
+2025-11-22 15:17:42,238 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.885444, fx=0.003460, 迭代30次
+2025-11-22 15:17:42,239 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.809961, fx=0.003866, 迭代29次
+2025-11-22 15:17:42,239 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.731351, fx=0.003478, 迭代31次
+2025-11-22 15:17:42,240 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.655099, fx=0.003460, 迭代31次
+2025-11-22 15:17:42,241 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.581135, fx=0.003803, 迭代31次
+2025-11-22 15:17:42,241 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.506998, fx=0.003984, 迭代32次
+2025-11-22 15:17:42,242 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.430524, fx=0.003535, 迭代34次
+2025-11-22 15:17:42,243 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.358816, fx=0.003991, 迭代33次
+2025-11-22 15:17:42,243 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.285063, fx=0.003881, 迭代35次
+2025-11-22 15:17:42,244 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.211723, fx=0.003737, 迭代36次
+2025-11-22 15:17:42,244 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.138927, fx=0.003590, 迭代37次
+2025-11-22 15:17:42,245 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.068752, fx=0.003900, 迭代37次
+2025-11-22 15:17:42,246 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.997345, fx=0.003819, 迭代39次
+2025-11-22 15:17:42,247 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.926844, fx=0.003821, 迭代40次
+2025-11-22 15:17:42,248 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.857355, fx=0.003931, 迭代41次
+2025-11-22 15:17:42,249 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.787310, fx=0.003800, 迭代43次
+2025-11-22 15:17:42,250 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.718609, fx=0.003856, 迭代44次
+2025-11-22 15:17:42,250 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.649805, fx=0.003773, 迭代46次
+2025-11-22 15:17:42,251 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.582637, fx=0.003947, 迭代47次
+2025-11-22 15:17:42,252 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.514379, fx=0.003759, 迭代50次
+2025-11-22 15:17:42,253 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.448141, fx=0.003918, 迭代51次
+2025-11-22 15:17:42,254 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.381440, fx=0.003859, 迭代54次
+2025-11-22 15:17:42,255 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.315890, fx=0.003951, 迭代56次
+2025-11-22 15:17:42,256 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.250566, fx=0.003984, 迭代59次
+2025-11-22 15:17:42,256 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.184787, fx=0.003801, 迭代63次
+2025-11-22 15:17:42,257 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.121097, fx=0.003993, 迭代65次
+2025-11-22 15:17:42,258 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.056825, fx=0.003943, 迭代70次
+2025-11-22 15:17:42,259 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.992652, fx=0.003809, 迭代75次
+2025-11-22 15:17:42,260 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.930016, fx=0.003931, 迭代79次
+2025-11-22 15:17:42,262 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.867082, fx=0.003881, 迭代86次
+2025-11-22 15:17:42,263 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.804756, fx=0.003872, 迭代93次
+2025-11-22 15:17:42,264 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.743242, fx=0.003956, 迭代101次
+2025-11-22 15:17:42,266 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.681791, fx=0.003952, 迭代112次
+2025-11-22 15:17:42,268 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.620762, fx=0.003947, 迭代125次
+2025-11-22 15:17:42,269 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.560402, fx=0.003999, 迭代141次
+2025-11-22 15:17:42,271 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.499965, fx=0.003929, 迭代164次
+2025-11-22 15:17:42,274 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.440379, fx=0.003961, 迭代193次
+2025-11-22 15:17:42,277 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.381200, fx=0.003986, 迭代237次
+2025-11-22 15:17:42,280 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.322386, fx=0.003998, 迭代308次
+2025-11-22 15:17:42,285 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.263837, fx=0.003975, 迭代442次
+2025-11-22 15:17:42,294 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.205801, fx=0.003983, 迭代783次
+2025-11-22 15:17:42,294 - DEBUG - [pmsm_fcc_calculator.py:1191] - 电流超限: Is=130.00 > IPmax=130.00
+2025-11-22 15:17:42,294 - INFO - [pmsm_fcc_calculator.py:1232] - 等转矩线计算完成，轨迹点数=101
+2025-11-22 15:17:42,295 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=2094.40 rad/s
+2025-11-22 15:17:42,295 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:42,296 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-64.13, iq=0.00
+2025-11-22 15:17:42,296 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-114.62, iq=61.34
+2025-11-22 15:17:42,297 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:42,312 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=14.26 N·m
+2025-11-22 15:17:42,314 - INFO - [pmsm_fcc_calculator.py:1697] - 弱磁控制结果生成完成
+2025-11-22 15:17:42,314 - INFO - [test_pmsm_fcc.py:490] - IsRange点数: 251
+2025-11-22 15:17:42,314 - INFO - [test_pmsm_fcc.py:491] - IsTrackAtMaxCapacity点数: 299
+2025-11-22 15:17:42,315 - INFO - [test_pmsm_fcc.py:492] - equTemTrack点数: 201
+2025-11-22 15:17:42,315 - INFO - [test_pmsm_fcc.py:493] - equWeTrack点数: 200
+2025-11-22 15:17:42,315 - INFO - [test_pmsm_fcc.py:494] - givenPoint: iq=19.46, id=-69.39, Tem=4.00, We=2094.40
+2025-11-22 15:17:42,316 - INFO - [test_pmsm_fcc.py:500] - ✓ 弱磁控制结果生成测试通过
+
+2025-11-22 15:17:42,316 - INFO - [test_pmsm_fcc.py:510] - ======================================================================
+2025-11-22 15:17:42,316 - INFO - [test_pmsm_fcc.py:511] - 绘制电机特性曲线
+2025-11-22 15:17:42,316 - INFO - [test_pmsm_fcc.py:512] - ======================================================================
+2025-11-22 15:17:42,813 - INFO - [test_pmsm_fcc.py:564] - ✓ 电机特性曲线已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\motor_characteristics.png
+
+2025-11-22 15:17:42,813 - INFO - [test_pmsm_fcc.py:570] - ======================================================================
+2025-11-22 15:17:42,814 - INFO - [test_pmsm_fcc.py:571] - 绘制非弱磁区轨迹
+2025-11-22 15:17:42,814 - INFO - [test_pmsm_fcc.py:572] - ======================================================================
+2025-11-22 15:17:43,191 - INFO - [test_pmsm_fcc.py:609] - ✓ 非弱磁区轨迹已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\nonFw_track.png
+
+2025-11-22 15:17:43,192 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:43,193 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:43,193 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:43,193 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:43,194 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:43,194 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:43,194 - INFO - [pmsm_fcc_calculator.py:1033] - 开始计算弱磁I区电流轨迹，扫描点数=200
+2025-11-22 15:17:43,199 - INFO - [pmsm_fcc_calculator.py:1051] - 弱磁I区电流轨迹计算完成，轨迹点数=200
+2025-11-22 15:17:43,199 - INFO - [pmsm_fcc_calculator.py:1072] - 开始拼接完整电流轨迹
+2025-11-22 15:17:43,199 - INFO - [pmsm_fcc_calculator.py:1087] - 完整电流轨迹拼接完成，总点数=251
+2025-11-22 15:17:43,200 - INFO - [test_pmsm_fcc.py:615] - ======================================================================
+2025-11-22 15:17:43,200 - INFO - [test_pmsm_fcc.py:616] - 绘制完整电流控制范围
+2025-11-22 15:17:43,200 - INFO - [test_pmsm_fcc.py:617] - ======================================================================
+2025-11-22 15:17:43,200 - INFO - [pmsm_fcc_calculator.py:164] - 检测到输入为 PsiD_vs_id，开始转换为 PsiR_vs_id
+2025-11-22 15:17:43,201 - INFO - [pmsm_fcc_calculator.py:166] - 转换完成，PsiR_vs_id 点数: 31
+2025-11-22 15:17:43,201 - INFO - [pmsm_fcc_calculator.py:197] - 初始化PMSM场路耦合计算器
+2025-11-22 15:17:43,201 - INFO - [pmsm_fcc_calculator.py:201] - 电压/电流限幅: UPmax=41.57 V, IPmax=130.00 A
+2025-11-22 15:17:43,202 - DEBUG - [pmsm_fcc_calculator.py:205] - 插值函数创建完成
+2025-11-22 15:17:43,202 - INFO - [pmsm_fcc_calculator.py:212] - 未发生完全退磁
+2025-11-22 15:17:43,393 - INFO - [test_pmsm_fcc.py:644] - ✓ 电流控制范围已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\current_range.png
+
+2025-11-22 15:17:43,394 - INFO - [test_pmsm_fcc.py:703] - ======================================================================
+2025-11-22 15:17:43,394 - INFO - [test_pmsm_fcc.py:704] - 绘制等转矩线和等电压椭圆簇
+2025-11-22 15:17:43,394 - INFO - [test_pmsm_fcc.py:705] - ======================================================================
+2025-11-22 15:17:43,398 - INFO - [pmsm_fcc_calculator.py:1072] - 开始拼接完整电流轨迹
+2025-11-22 15:17:43,399 - INFO - [pmsm_fcc_calculator.py:1087] - 完整电流轨迹拼接完成，总点数=251
+2025-11-22 15:17:43,406 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=1286.29 rad/s
+2025-11-22 15:17:43,406 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,406 - INFO - [pmsm_fcc_calculator.py:1277] - 转速过低，返回空轨迹
+2025-11-22 15:17:43,407 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=1420.55 rad/s
+2025-11-22 15:17:43,407 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,407 - DEBUG - [pmsm_fcc_calculator.py:1286] - 起点在非弱磁区内: id=-23.63, iq=80.01
+2025-11-22 15:17:43,408 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-69.98, iq=109.55
+2025-11-22 15:17:43,408 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=59.62
+2025-11-22 15:17:43,421 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=100, 最大转矩=21.66 N·m
+2025-11-22 15:17:43,422 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=1568.82 rad/s
+2025-11-22 15:17:43,422 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,423 - DEBUG - [pmsm_fcc_calculator.py:1286] - 起点在非弱磁区内: id=-1.75, iq=19.89
+2025-11-22 15:17:43,423 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-86.86, iq=96.73
+2025-11-22 15:17:43,424 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=14.93
+2025-11-22 15:17:43,436 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=100, 最大转矩=20.24 N·m
+2025-11-22 15:17:43,437 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=1732.57 rad/s
+2025-11-22 15:17:43,437 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,437 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-22.95, iq=0.00
+2025-11-22 15:17:43,438 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-99.20, iq=84.02
+2025-11-22 15:17:43,438 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,454 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=18.39 N·m
+2025-11-22 15:17:43,455 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=1913.41 rad/s
+2025-11-22 15:17:43,455 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,456 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-45.54, iq=0.00
+2025-11-22 15:17:43,456 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-108.31, iq=71.89
+2025-11-22 15:17:43,456 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,490 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=16.29 N·m
+2025-11-22 15:17:43,491 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=2113.12 rad/s
+2025-11-22 15:17:43,491 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,492 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-65.87, iq=0.00
+2025-11-22 15:17:43,492 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-115.16, iq=60.32
+2025-11-22 15:17:43,493 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,511 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=14.05 N·m
+2025-11-22 15:17:43,512 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=2333.69 rad/s
+2025-11-22 15:17:43,513 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,513 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-84.28, iq=0.00
+2025-11-22 15:17:43,514 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-120.39, iq=49.05
+2025-11-22 15:17:43,514 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,529 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=11.67 N·m
+2025-11-22 15:17:43,530 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=2577.27 rad/s
+2025-11-22 15:17:43,530 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,531 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-101.00, iq=0.00
+2025-11-22 15:17:43,531 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-124.45, iq=37.58
+2025-11-22 15:17:43,531 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,547 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=9.10 N·m
+2025-11-22 15:17:43,548 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=2846.27 rad/s
+2025-11-22 15:17:43,548 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,549 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-116.19, iq=0.00
+2025-11-22 15:17:43,549 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-127.61, iq=24.80
+2025-11-22 15:17:43,550 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,565 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=6.09 N·m
+2025-11-22 15:17:43,566 - INFO - [pmsm_fcc_calculator.py:1257] - 开始计算等电压椭圆，转速=3143.36 rad/s
+2025-11-22 15:17:43,567 - DEBUG - [pmsm_fcc_calculator.py:1274] - 非弱磁区末端最大转速=1286.29, 起点最大转速=1583.43
+2025-11-22 15:17:43,567 - DEBUG - [pmsm_fcc_calculator.py:1296] - 起点在非弱磁区外: id=-130.00, iq=0.00
+2025-11-22 15:17:43,569 - DEBUG - [pmsm_fcc_calculator.py:1305] - 终点在弱磁I区: id=-130.00, iq=0.00
+2025-11-22 15:17:43,569 - DEBUG - [pmsm_fcc_calculator.py:1318] - 等电压圆最大iq=0.00
+2025-11-22 15:17:43,577 - INFO - [pmsm_fcc_calculator.py:1362] - 等电压椭圆计算完成，轨迹点数=200, 最大转矩=0.00 N·m
+2025-11-22 15:17:43,578 - INFO - [pmsm_fcc_calculator.py:1110] - 开始计算等转矩线，目标转矩=3.71 N·m
+2025-11-22 15:17:43,579 - DEBUG - [pmsm_fcc_calculator.py:1121] - 非弱磁区上插值点: iq=23.32, id=-2.40
+2025-11-22 15:17:43,580 - DEBUG - [pmsm_fcc_calculator.py:1133] - 左端点在弱磁I区: iq=15.02, id=-129.13
+2025-11-22 15:17:43,581 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.337339, fx=0.003252, 迭代122次
+2025-11-22 15:17:43,582 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.204208, fx=0.002910, 迭代17次
+2025-11-22 15:17:43,582 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.073206, fx=0.002624, 迭代17次
+2025-11-22 15:17:43,583 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.952357, fx=0.003704, 迭代16次
+2025-11-22 15:17:43,583 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.825385, fx=0.003534, 迭代17次
+2025-11-22 15:17:43,584 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.700445, fx=0.003436, 迭代17次
+2025-11-22 15:17:43,584 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.577504, fx=0.003417, 迭代17次
+2025-11-22 15:17:43,585 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.456529, fx=0.003478, 迭代17次
+2025-11-22 15:17:43,585 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.337491, fx=0.003621, 迭代17次
+2025-11-22 15:17:43,586 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.213036, fx=0.002624, 迭代18次
+2025-11-22 15:17:43,586 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.097893, fx=0.002949, 迭代17次
+2025-11-22 15:17:43,587 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.984592, fx=0.003359, 迭代17次
+2025-11-22 15:17:43,587 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.866137, fx=0.002675, 迭代18次
+2025-11-22 15:17:43,587 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.756544, fx=0.003276, 迭代17次
+2025-11-22 15:17:43,588 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.641966, fx=0.002812, 迭代18次
+2025-11-22 15:17:43,588 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.535960, fx=0.003608, 迭代17次
+2025-11-22 15:17:43,588 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.425131, fx=0.003370, 迭代18次
+2025-11-22 15:17:43,589 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.316186, fx=0.003253, 迭代18次
+2025-11-22 15:17:43,589 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.209094, fx=0.003259, 迭代18次
+2025-11-22 15:17:43,589 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.103821, fx=0.003389, 迭代18次
+2025-11-22 15:17:43,590 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.000339, fx=0.003643, 迭代18次
+2025-11-22 15:17:43,590 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.892632, fx=0.002959, 迭代19次
+2025-11-22 15:17:43,590 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.792739, fx=0.003472, 迭代18次
+2025-11-22 15:17:43,590 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.688769, fx=0.003072, 迭代19次
+2025-11-22 15:17:43,591 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.586670, fx=0.002818, 迭代19次
+2025-11-22 15:17:43,591 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.486409, fx=0.002710, 迭代19次
+2025-11-22 15:17:43,592 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.387953, fx=0.002745, 迭代19次
+2025-11-22 15:17:43,592 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.291269, fx=0.002923, 迭代19次
+2025-11-22 15:17:43,593 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.196325, fx=0.003243, 迭代19次
+2025-11-22 15:17:43,593 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.103090, fx=0.003705, 迭代19次
+2025-11-22 15:17:43,593 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.006447, fx=0.003367, 迭代20次
+2025-11-22 15:17:43,594 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.911640, fx=0.003195, 迭代20次
+2025-11-22 15:17:43,594 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.818635, fx=0.003191, 迭代20次
+2025-11-22 15:17:43,594 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.727396, fx=0.003353, 迭代20次
+2025-11-22 15:17:43,595 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.637892, fx=0.003681, 迭代20次
+2025-11-22 15:17:43,595 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.545466, fx=0.003296, 迭代21次
+2025-11-22 15:17:43,596 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.454889, fx=0.003100, 迭代21次
+2025-11-22 15:17:43,596 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.366123, fx=0.003091, 迭代21次
+2025-11-22 15:17:43,596 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.279133, fx=0.003266, 迭代21次
+2025-11-22 15:17:43,597 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.193883, fx=0.003625, 迭代21次
+2025-11-22 15:17:43,597 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.106160, fx=0.003354, 迭代22次
+2025-11-22 15:17:43,597 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.020280, fx=0.003288, 迭代22次
+2025-11-22 15:17:43,598 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.936203, fx=0.003425, 迭代22次
+2025-11-22 15:17:43,598 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.849972, fx=0.002991, 迭代23次
+2025-11-22 15:17:43,600 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.769471, fx=0.003539, 迭代22次
+2025-11-22 15:17:43,600 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.686908, fx=0.003537, 迭代23次
+2025-11-22 15:17:43,600 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.602491, fx=0.003024, 迭代24次
+2025-11-22 15:17:43,601 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.523602, fx=0.003469, 迭代23次
+2025-11-22 15:17:43,601 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.442941, fx=0.003423, 迭代24次
+2025-11-22 15:17:43,601 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.364136, fx=0.003612, 迭代24次
+2025-11-22 15:17:43,602 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.283795, fx=0.003353, 迭代25次
+2025-11-22 15:17:43,603 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.205383, fx=0.003348, 迭代25次
+2025-11-22 15:17:43,603 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.128852, fx=0.003593, 迭代25次
+2025-11-22 15:17:43,604 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.051047, fx=0.003445, 迭代26次
+2025-11-22 15:17:43,604 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.975186, fx=0.003563, 迭代26次
+2025-11-22 15:17:43,605 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.898263, fx=0.003332, 迭代27次
+2025-11-22 15:17:43,605 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.823340, fx=0.003383, 迭代27次
+2025-11-22 15:17:43,606 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.747558, fx=0.003128, 迭代28次
+2025-11-22 15:17:43,606 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.673823, fx=0.003170, 迭代28次
+2025-11-22 15:17:43,607 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.602078, fx=0.003506, 迭代28次
+2025-11-22 15:17:43,607 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.529685, fx=0.003581, 迭代29次
+2025-11-22 15:17:43,608 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.456806, fx=0.003429, 迭代30次
+2025-11-22 15:17:43,608 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.386040, fx=0.003602, 迭代30次
+2025-11-22 15:17:43,608 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.314958, fx=0.003587, 迭代31次
+2025-11-22 15:17:43,609 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.243709, fx=0.003414, 迭代32次
+2025-11-22 15:17:43,609 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.174669, fx=0.003596, 迭代32次
+2025-11-22 15:17:43,610 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.105611, fx=0.003656, 迭代33次
+2025-11-22 15:17:43,611 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.036674, fx=0.003626, 迭代34次
+2025-11-22 15:17:43,611 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.967992, fx=0.003535, 迭代35次
+2025-11-22 15:17:43,612 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.899694, fx=0.003412, 迭代36次
+2025-11-22 15:17:43,613 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.833786, fx=0.003699, 迭代36次
+2025-11-22 15:17:43,613 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.766551, fx=0.003583, 迭代38次
+2025-11-22 15:17:43,614 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.700053, fx=0.003516, 迭代39次
+2025-11-22 15:17:43,615 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.634399, fx=0.003526, 迭代40次
+2025-11-22 15:17:43,615 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.569687, fx=0.003637, 迭代41次
+2025-11-22 15:17:43,616 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.504458, fx=0.003522, 迭代43次
+2025-11-22 15:17:43,617 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.440481, fx=0.003581, 迭代44次
+2025-11-22 15:17:43,617 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.376407, fx=0.003510, 迭代46次
+2025-11-22 15:17:43,618 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.313856, fx=0.003677, 迭代47次
+2025-11-22 15:17:43,619 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.250291, fx=0.003507, 迭代50次
+2025-11-22 15:17:43,620 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.188608, fx=0.003660, 迭代51次
+2025-11-22 15:17:43,620 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.126492, fx=0.003609, 迭代54次
+2025-11-22 15:17:43,621 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.065449, fx=0.003698, 迭代56次
+2025-11-22 15:17:43,623 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.003567, fx=0.003490, 迭代60次
+2025-11-22 15:17:43,624 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.943363, fx=0.003565, 迭代62次
+2025-11-22 15:17:43,625 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.883124, fx=0.003530, 迭代66次
+2025-11-22 15:17:43,626 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.824202, fx=0.003701, 迭代69次
+2025-11-22 15:17:43,626 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.764440, fx=0.003578, 迭代75次
+2025-11-22 15:17:43,627 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.706110, fx=0.003692, 迭代79次
+2025-11-22 15:17:43,630 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.647502, fx=0.003646, 迭代86次
+2025-11-22 15:17:43,631 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.589461, fx=0.003638, 迭代93次
+2025-11-22 15:17:43,632 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.531603, fx=0.003578, 迭代102次
+2025-11-22 15:17:43,634 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.474954, fx=0.003712, 迭代111次
+2025-11-22 15:17:43,635 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.418120, fx=0.003705, 迭代125次
+2025-11-22 15:17:43,637 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.361507, fx=0.003655, 迭代142次
+2025-11-22 15:17:43,640 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.305634, fx=0.003686, 迭代163次
+2025-11-22 15:17:43,642 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.250142, fx=0.003711, 迭代193次
+2025-11-22 15:17:43,645 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.194796, fx=0.003674, 迭代238次
+2025-11-22 15:17:43,650 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.140094, fx=0.003697, 迭代308次
+2025-11-22 15:17:43,655 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.085639, fx=0.003689, 迭代442次
+2025-11-22 15:17:43,663 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=15.031661, fx=0.003708, 迭代783次
+2025-11-22 15:17:43,663 - DEBUG - [pmsm_fcc_calculator.py:1191] - 电流超限: Is=130.00 > IPmax=130.00
+2025-11-22 15:17:43,664 - INFO - [pmsm_fcc_calculator.py:1232] - 等转矩线计算完成，轨迹点数=101
+2025-11-22 15:17:43,664 - INFO - [pmsm_fcc_calculator.py:1110] - 开始计算等转矩线，目标转矩=7.43 N·m
+2025-11-22 15:17:43,665 - DEBUG - [pmsm_fcc_calculator.py:1121] - 非弱磁区上插值点: iq=45.43, id=-8.62
+2025-11-22 15:17:43,666 - DEBUG - [pmsm_fcc_calculator.py:1133] - 左端点在弱磁I区: iq=30.41, id=-126.39
+2025-11-22 15:17:43,667 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=45.468468, fx=0.006663, 迭代130次
+2025-11-22 15:17:43,668 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=45.242563, fx=0.006254, 迭代16次
+2025-11-22 15:17:43,668 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=45.020047, fx=0.006009, 迭代16次
+2025-11-22 15:17:43,669 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=44.800869, fx=0.005931, 迭代16次
+2025-11-22 15:17:43,669 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=44.584978, fx=0.006022, 迭代16次
+2025-11-22 15:17:43,669 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=44.372326, fx=0.006283, 迭代16次
+2025-11-22 15:17:43,670 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=44.162863, fx=0.006715, 迭代16次
+2025-11-22 15:17:43,670 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=43.956542, fx=0.007320, 迭代16次
+2025-11-22 15:17:43,670 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=43.739768, fx=0.005809, 迭代17次
+2025-11-22 15:17:43,671 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=43.539794, fx=0.006790, 迭代16次
+2025-11-22 15:17:43,671 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=43.329687, fx=0.005707, 迭代17次
+2025-11-22 15:17:43,671 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=43.135864, fx=0.007069, 迭代16次
+2025-11-22 15:17:43,672 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=42.932221, fx=0.006422, 迭代17次
+2025-11-22 15:17:43,672 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=42.731835, fx=0.006008, 迭代17次
+2025-11-22 15:17:43,672 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=42.534656, fx=0.005827, 迭代17次
+2025-11-22 15:17:43,673 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=42.340632, fx=0.005880, 迭代17次
+2025-11-22 15:17:43,673 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=42.149713, fx=0.006167, 迭代17次
+2025-11-22 15:17:43,674 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=41.961848, fx=0.006688, 迭代17次
+2025-11-22 15:17:43,674 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=41.765435, fx=0.005399, 迭代18次
+2025-11-22 15:17:43,674 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=41.583718, fx=0.006404, 迭代17次
+2025-11-22 15:17:43,675 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=41.393733, fx=0.005643, 迭代18次
+2025-11-22 15:17:43,675 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=41.217964, fx=0.007120, 迭代17次
+2025-11-22 15:17:43,675 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=41.034197, fx=0.006876, 迭代18次
+2025-11-22 15:17:43,675 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=40.853554, fx=0.006898, 迭代18次
+2025-11-22 15:17:43,676 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=40.675982, fx=0.007185, 迭代18次
+2025-11-22 15:17:43,676 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=40.491161, fx=0.005865, 迭代19次
+2025-11-22 15:17:43,677 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=40.319750, fx=0.006701, 迭代18次
+2025-11-22 15:17:43,677 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=40.141341, fx=0.005979, 迭代19次
+2025-11-22 15:17:43,677 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=39.975877, fx=0.007360, 迭代18次
+2025-11-22 15:17:43,678 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=39.803658, fx=0.007228, 迭代19次
+2025-11-22 15:17:43,678 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=39.634539, fx=0.007403, 迭代19次
+2025-11-22 15:17:43,679 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=39.459237, fx=0.006158, 迭代20次
+2025-11-22 15:17:43,679 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=39.296318, fx=0.006960, 迭代19次
+2025-11-22 15:17:43,680 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=39.127442, fx=0.006388, 迭代20次
+2025-11-22 15:17:43,680 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.961776, fx=0.006158, 迭代20次
+2025-11-22 15:17:43,680 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.799257, fx=0.006267, 迭代20次
+2025-11-22 15:17:43,681 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.639826, fx=0.006712, 迭代20次
+2025-11-22 15:17:43,681 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.475192, fx=0.005914, 迭代21次
+2025-11-22 15:17:43,681 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.321918, fx=0.007042, 迭代20次
+2025-11-22 15:17:43,682 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.163643, fx=0.006967, 迭代21次
+2025-11-22 15:17:43,682 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=38.008533, fx=0.007260, 迭代21次
+2025-11-22 15:17:43,682 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=37.848925, fx=0.006439, 迭代22次
+2025-11-22 15:17:43,683 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=37.692669, fx=0.006025, 迭代22次
+2025-11-22 15:17:43,683 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=37.539694, fx=0.006013, 迭代22次
+2025-11-22 15:17:43,684 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=37.389931, fx=0.006398, 迭代22次
+2025-11-22 15:17:43,684 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=37.243314, fx=0.007173, 迭代22次
+2025-11-22 15:17:43,684 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=37.092940, fx=0.006979, 迭代23次
+2025-11-22 15:17:43,685 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.945875, fx=0.007213, 迭代23次
+2025-11-22 15:17:43,685 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.795507, fx=0.006562, 迭代24次
+2025-11-22 15:17:43,685 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.648598, fx=0.006373, 迭代24次
+2025-11-22 15:17:43,686 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.505067, fx=0.006639, 迭代24次
+2025-11-22 15:17:43,686 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.364838, fx=0.007353, 迭代24次
+2025-11-22 15:17:43,686 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.221878, fx=0.007298, 迭代25次
+2025-11-22 15:17:43,687 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=36.076535, fx=0.006539, 迭代26次
+2025-11-22 15:17:43,687 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.934825, fx=0.006300, 迭代26次
+2025-11-22 15:17:43,688 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.796658, fx=0.006571, 迭代26次
+2025-11-22 15:17:43,688 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.661945, fx=0.007343, 迭代26次
+2025-11-22 15:17:43,688 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.520093, fx=0.006431, 迭代28次
+2025-11-22 15:17:43,689 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.387182, fx=0.007159, 迭代27次
+2025-11-22 15:17:43,689 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.252748, fx=0.007366, 迭代28次
+2025-11-22 15:17:43,690 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=35.117099, fx=0.007112, 迭代29次
+2025-11-22 15:17:43,690 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.980540, fx=0.006459, 迭代30次
+2025-11-22 15:17:43,691 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.852513, fx=0.007396, 迭代29次
+2025-11-22 15:17:43,691 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.719182, fx=0.007014, 迭代31次
+2025-11-22 15:17:43,692 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.589851, fx=0.007278, 迭代31次
+2025-11-22 15:17:43,692 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.460218, fx=0.007281, 迭代32次
+2025-11-22 15:17:43,693 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.330552, fx=0.007079, 迭代33次
+2025-11-22 15:17:43,693 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.201112, fx=0.006728, 迭代34次
+2025-11-22 15:17:43,694 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=34.075945, fx=0.007102, 迭代34次
+2025-11-22 15:17:43,694 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.951240, fx=0.007387, 迭代35次
+2025-11-22 15:17:43,695 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.823688, fx=0.006865, 迭代37次
+2025-11-22 15:17:43,695 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.700729, fx=0.007152, 迭代37次
+2025-11-22 15:17:43,696 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.575611, fx=0.006780, 迭代39次
+2025-11-22 15:17:43,697 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.455247, fx=0.007263, 迭代39次
+2025-11-22 15:17:43,697 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.333363, fx=0.007230, 迭代41次
+2025-11-22 15:17:43,698 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.210504, fx=0.006798, 迭代43次
+2025-11-22 15:17:43,698 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=33.092805, fx=0.007325, 迭代43次
+2025-11-22 15:17:43,699 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.971996, fx=0.006983, 迭代46次
+2025-11-22 15:17:43,700 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.854059, fx=0.007100, 迭代47次
+2025-11-22 15:17:43,700 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.736655, fx=0.007158, 迭代49次
+2025-11-22 15:17:43,701 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.620230, fx=0.007257, 迭代51次
+2025-11-22 15:17:43,702 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.502989, fx=0.006994, 迭代54次
+2025-11-22 15:17:43,703 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.387773, fx=0.007010, 迭代56次
+2025-11-22 15:17:43,703 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.274934, fx=0.007390, 迭代58次
+2025-11-22 15:17:43,704 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.161060, fx=0.007359, 迭代62次
+2025-11-22 15:17:43,705 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=32.047121, fx=0.007137, 迭代66次
+2025-11-22 15:17:43,706 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.935671, fx=0.007314, 迭代69次
+2025-11-22 15:17:43,707 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.824162, fx=0.007308, 迭代74次
+2025-11-22 15:17:43,708 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.713713, fx=0.007378, 迭代79次
+2025-11-22 15:17:43,709 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.602740, fx=0.007162, 迭代86次
+2025-11-22 15:17:43,711 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.494032, fx=0.007309, 迭代92次
+2025-11-22 15:17:43,712 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.385443, fx=0.007323, 迭代101次
+2025-11-22 15:17:43,713 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.276964, fx=0.007202, 迭代112次
+2025-11-22 15:17:43,715 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.170099, fx=0.007300, 迭代124次
+2025-11-22 15:17:43,716 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=31.063426, fx=0.007282, 迭代141次
+2025-11-22 15:17:43,718 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=30.957926, fx=0.007379, 迭代162次
+2025-11-22 15:17:43,720 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=30.852369, fx=0.007299, 迭代193次
+2025-11-22 15:17:43,723 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=30.747977, fx=0.007331, 迭代236次
+2025-11-22 15:17:43,727 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=30.644329, fx=0.007376, 迭代306次
+2025-11-22 15:17:43,731 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=30.541354, fx=0.007416, 迭代437次
+2025-11-22 15:17:43,741 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=30.438919, fx=0.007424, 迭代770次
+2025-11-22 15:17:43,741 - DEBUG - [pmsm_fcc_calculator.py:1191] - 电流超限: Is=130.01 > IPmax=130.00
+2025-11-22 15:17:43,741 - INFO - [pmsm_fcc_calculator.py:1232] - 等转矩线计算完成，轨迹点数=101
+2025-11-22 15:17:43,742 - INFO - [pmsm_fcc_calculator.py:1110] - 开始计算等转矩线，目标转矩=11.14 N·m
+2025-11-22 15:17:43,742 - DEBUG - [pmsm_fcc_calculator.py:1121] - 非弱磁区上插值点: iq=66.02, id=-16.94
+2025-11-22 15:17:43,743 - DEBUG - [pmsm_fcc_calculator.py:1133] - 左端点在弱磁I区: iq=46.62, id=-121.35
+2025-11-22 15:17:43,745 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.079022, fx=0.009064, 迭代144次
+2025-11-22 15:17:43,745 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.806601, fx=0.008386, 迭代15次
+2025-11-22 15:17:43,745 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.537993, fx=0.007982, 迭代15次
+2025-11-22 15:17:43,746 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.292063, fx=0.011050, 迭代14次
+2025-11-22 15:17:43,746 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.011987, fx=0.008000, 迭代16次
+2025-11-22 15:17:43,746 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.754503, fx=0.008425, 迭代15次
+2025-11-22 15:17:43,747 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.500625, fx=0.009127, 迭代15次
+2025-11-22 15:17:43,747 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.250301, fx=0.010106, 迭代15次
+2025-11-22 15:17:43,747 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=63.985851, fx=0.008331, 迭代16次
+2025-11-22 15:17:43,747 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=63.742733, fx=0.009897, 迭代15次
+2025-11-22 15:17:43,748 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=63.485897, fx=0.008774, 迭代16次
+2025-11-22 15:17:43,748 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=63.249779, fx=0.010923, 迭代15次
+2025-11-22 15:17:43,748 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=63.000337, fx=0.010442, 迭代16次
+2025-11-22 15:17:43,748 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=62.754637, fx=0.010294, 迭代16次
+2025-11-22 15:17:43,749 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=62.512622, fx=0.010474, 迭代16次
+2025-11-22 15:17:43,749 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=62.274238, fx=0.010978, 迭代16次
+2025-11-22 15:17:43,750 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=62.023775, fx=0.009033, 迭代17次
+2025-11-22 15:17:43,750 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=61.792723, fx=0.010205, 迭代16次
+2025-11-22 15:17:43,750 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=61.549965, fx=0.008987, 迭代17次
+2025-11-22 15:17:43,751 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=61.326020, fx=0.010812, 迭代16次
+2025-11-22 15:17:43,751 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=61.090729, fx=0.010306, 迭代17次
+2025-11-22 15:17:43,751 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=60.859202, fx=0.010169, 迭代17次
+2025-11-22 15:17:43,752 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=60.631380, fx=0.010400, 迭代17次
+2025-11-22 15:17:43,752 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=60.407203, fx=0.010996, 迭代17次
+2025-11-22 15:17:43,752 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=60.172826, fx=0.009444, 迭代18次
+2025-11-22 15:17:43,753 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=59.955986, fx=0.010794, 迭代17次
+2025-11-22 15:17:43,753 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=59.729280, fx=0.010056, 迭代18次
+2025-11-22 15:17:43,754 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=59.506427, fx=0.009737, 迭代18次
+2025-11-22 15:17:43,754 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=59.287363, fx=0.009831, 迭代18次
+2025-11-22 15:17:43,754 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=59.072024, fx=0.010336, 迭代18次
+2025-11-22 15:17:43,755 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=58.847893, fx=0.008931, 迭代19次
+2025-11-22 15:17:43,755 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=58.640024, fx=0.010272, 迭代18次
+2025-11-22 15:17:43,755 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=58.423669, fx=0.009759, 迭代19次
+2025-11-22 15:17:43,756 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=58.211209, fx=0.009701, 迭代19次
+2025-11-22 15:17:43,756 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=58.002573, fx=0.010092, 迭代19次
+2025-11-22 15:17:43,757 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=57.797693, fx=0.010926, 迭代19次
+2025-11-22 15:17:43,757 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=57.585322, fx=0.010077, 迭代20次
+2025-11-22 15:17:43,758 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=57.376987, fx=0.009725, 迭代20次
+2025-11-22 15:17:43,758 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=57.172611, fx=0.009864, 迭代20次
+2025-11-22 15:17:43,758 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=56.972117, fx=0.010487, 迭代20次
+2025-11-22 15:17:43,759 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=56.765081, fx=0.009596, 迭代21次
+2025-11-22 15:17:43,759 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=56.562186, fx=0.009241, 迭代21次
+2025-11-22 15:17:43,759 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=56.363349, fx=0.009413, 迭代21次
+2025-11-22 15:17:43,760 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=56.168488, fx=0.010106, 迭代21次
+2025-11-22 15:17:43,760 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=55.967976, fx=0.009450, 迭代22次
+2025-11-22 15:17:43,761 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=55.771676, fx=0.009363, 迭代22次
+2025-11-22 15:17:43,761 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=55.579497, fx=0.009836, 迭代22次
+2025-11-22 15:17:43,761 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=55.391354, fx=0.010859, 迭代22次
+2025-11-22 15:17:43,762 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=55.198392, fx=0.010691, 迭代23次
+2025-11-22 15:17:43,762 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=55.009674, fx=0.011120, 迭代23次
+2025-11-22 15:17:43,763 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=54.816719, fx=0.010466, 迭代24次
+2025-11-22 15:17:43,763 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=54.628202, fx=0.010452, 迭代24次
+2025-11-22 15:17:43,763 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=54.444020, fx=0.011066, 迭代24次
+2025-11-22 15:17:43,764 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=54.256252, fx=0.010726, 迭代25次
+2025-11-22 15:17:43,764 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=54.072989, fx=0.011054, 迭代25次
+2025-11-22 15:17:43,765 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=53.886672, fx=0.010532, 迭代26次
+2025-11-22 15:17:43,765 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=53.705014, fx=0.010718, 迭代26次
+2025-11-22 15:17:43,765 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=53.520812, fx=0.010154, 迭代27次
+2025-11-22 15:17:43,766 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=53.341399, fx=0.010333, 迭代27次
+2025-11-22 15:17:43,766 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=53.159930, fx=0.009862, 迭代28次
+2025-11-22 15:17:43,767 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=52.983360, fx=0.010165, 迭代28次
+2025-11-22 15:17:43,767 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=52.805195, fx=0.009914, 迭代29次
+2025-11-22 15:17:43,767 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=52.632018, fx=0.010467, 迭代29次
+2025-11-22 15:17:43,768 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=52.457679, fx=0.010557, 迭代30次
+2025-11-22 15:17:43,768 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=52.282558, fx=0.010263, 迭代31次
+2025-11-22 15:17:43,769 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=52.112691, fx=0.010842, 迭代31次
+2025-11-22 15:17:43,770 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=51.942428, fx=0.011123, 迭代32次
+2025-11-22 15:17:43,770 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=51.766798, fx=0.010059, 迭代34次
+2025-11-22 15:17:43,771 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=51.602111, fx=0.011080, 迭代33次
+2025-11-22 15:17:43,771 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=51.432730, fx=0.010899, 迭代35次
+2025-11-22 15:17:43,772 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=51.264295, fx=0.010704, 迭代36次
+2025-11-22 15:17:43,772 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=51.097112, fx=0.010563, 迭代37次
+2025-11-22 15:17:43,773 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=50.931471, fx=0.010540, 迭代38次
+2025-11-22 15:17:43,774 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=50.767647, fx=0.010697, 迭代39次
+2025-11-22 15:17:43,775 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=50.605901, fx=0.011093, 迭代40次
+2025-11-22 15:17:43,775 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=50.442492, fx=0.010926, 迭代42次
+2025-11-22 15:17:43,776 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=50.278139, fx=0.010349, 迭代44次
+2025-11-22 15:17:43,777 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=50.120853, fx=0.011097, 迭代44次
+2025-11-22 15:17:43,777 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.959828, fx=0.010834, 迭代47次
+2025-11-22 15:17:43,778 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.799532, fx=0.010525, 迭代49次
+2025-11-22 15:17:43,779 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.643750, fx=0.011002, 迭代50次
+2025-11-22 15:17:43,780 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.486532, fx=0.010965, 迭代53次
+2025-11-22 15:17:43,780 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.328890, fx=0.010633, 迭代56次
+2025-11-22 15:17:43,781 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.174502, fx=0.010817, 迭代58次
+2025-11-22 15:17:43,782 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=49.021251, fx=0.011055, 迭代61次
+2025-11-22 15:17:43,783 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=48.867591, fx=0.011004, 迭代65次
+2025-11-22 15:17:43,784 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=48.714777, fx=0.010942, 迭代69次
+2025-11-22 15:17:43,784 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=48.563976, fx=0.011131, 迭代73次
+2025-11-22 15:17:43,785 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=48.412370, fx=0.010944, 迭代79次
+2025-11-22 15:17:43,787 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=48.261838, fx=0.010803, 迭代85次
+2025-11-22 15:17:43,788 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=48.114101, fx=0.011102, 迭代91次
+2025-11-22 15:17:43,789 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.964723, fx=0.010840, 迭代101次
+2025-11-22 15:17:43,790 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.818183, fx=0.011034, 迭代110次
+2025-11-22 15:17:43,792 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.672044, fx=0.011136, 迭代123次
+2025-11-22 15:17:43,794 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.525854, fx=0.011043, 迭代140次
+2025-11-22 15:17:43,795 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.380968, fx=0.011068, 迭代161次
+2025-11-22 15:17:43,797 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.236445, fx=0.010996, 迭代191次
+2025-11-22 15:17:43,800 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=47.093504, fx=0.011106, 迭代233次
+2025-11-22 15:17:43,803 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=46.950602, fx=0.011044, 迭代303次
+2025-11-22 15:17:43,808 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=46.808911, fx=0.011077, 迭代430次
+2025-11-22 15:17:43,817 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=46.668033, fx=0.011114, 迭代748次
+2025-11-22 15:17:43,817 - DEBUG - [pmsm_fcc_calculator.py:1191] - 电流超限: Is=130.02 > IPmax=130.00
+2025-11-22 15:17:43,817 - INFO - [pmsm_fcc_calculator.py:1232] - 等转矩线计算完成，轨迹点数=101
+2025-11-22 15:17:43,818 - INFO - [pmsm_fcc_calculator.py:1110] - 开始计算等转矩线，目标转矩=14.85 N·m
+2025-11-22 15:17:43,819 - DEBUG - [pmsm_fcc_calculator.py:1121] - 非弱磁区上插值点: iq=85.35, id=-26.34
+2025-11-22 15:17:43,820 - DEBUG - [pmsm_fcc_calculator.py:1133] - 左端点在弱磁I区: iq=64.32, id=-112.97
+2025-11-22 15:17:43,822 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.419871, fx=0.011647, 迭代167次
+2025-11-22 15:17:43,822 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.166717, fx=0.014182, 迭代13次
+2025-11-22 15:17:43,822 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=84.895759, fx=0.013447, 迭代14次
+2025-11-22 15:17:43,823 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=84.628323, fx=0.013069, 迭代14次
+2025-11-22 15:17:43,823 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=84.364363, fx=0.013043, 迭代14次
+2025-11-22 15:17:43,823 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=84.103835, fx=0.013365, 迭代14次
+2025-11-22 15:17:43,824 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=83.846694, fx=0.014031, 迭代14次
+2025-11-22 15:17:43,824 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=83.573373, fx=0.011658, 迭代15次
+2025-11-22 15:17:43,824 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=83.323128, fx=0.013034, 迭代14次
+2025-11-22 15:17:43,825 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=83.076136, fx=0.014741, 迭代14次
+2025-11-22 15:17:43,825 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=82.813603, fx=0.013504, 迭代15次
+2025-11-22 15:17:43,825 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=82.554745, fx=0.012661, 迭代15次
+2025-11-22 15:17:43,825 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=82.299511, fx=0.012207, 迭代15次
+2025-11-22 15:17:43,826 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=82.047850, fx=0.012140, 迭代15次
+2025-11-22 15:17:43,826 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=81.799713, fx=0.012455, 迭代15次
+2025-11-22 15:17:43,827 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=81.555050, fx=0.013151, 迭代15次
+2025-11-22 15:17:43,827 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=81.313811, fx=0.014223, 迭代15次
+2025-11-22 15:17:43,827 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=81.058961, fx=0.012650, 迭代16次
+2025-11-22 15:17:43,828 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=80.824668, fx=0.014500, 迭代15次
+2025-11-22 15:17:43,828 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=80.577154, fx=0.013770, 迭代16次
+2025-11-22 15:17:43,828 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=80.333353, fx=0.013474, 迭代16次
+2025-11-22 15:17:43,828 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=80.093209, fx=0.013607, 迭代16次
+2025-11-22 15:17:43,829 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=79.856667, fx=0.014165, 迭代16次
+2025-11-22 15:17:43,829 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=79.608140, fx=0.012339, 迭代17次
+2025-11-22 15:17:43,829 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=79.378875, fx=0.013767, 迭代16次
+2025-11-22 15:17:43,830 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=79.137993, fx=0.012873, 迭代17次
+2025-11-22 15:17:43,830 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=78.900965, fx=0.012454, 迭代17次
+2025-11-22 15:17:43,830 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=78.667729, fx=0.012505, 迭代17次
+2025-11-22 15:17:43,831 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=78.438226, fx=0.013021, 迭代17次
+2025-11-22 15:17:43,831 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=78.212394, fx=0.013994, 迭代17次
+2025-11-22 15:17:43,832 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=77.976287, fx=0.012866, 迭代18次
+2025-11-22 15:17:43,832 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=77.757847, fx=0.014773, 迭代17次
+2025-11-22 15:17:43,832 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=77.529467, fx=0.014637, 迭代18次
+2025-11-22 15:17:43,833 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=77.291764, fx=0.012558, 迭代19次
+2025-11-22 15:17:43,833 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=77.071308, fx=0.013461, 迭代18次
+2025-11-22 15:17:43,834 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=76.841852, fx=0.012478, 迭代19次
+2025-11-22 15:17:43,834 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=76.629044, fx=0.014391, 迭代18次
+2025-11-22 15:17:43,834 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=76.407549, fx=0.014475, 迭代19次
+2025-11-22 15:17:43,835 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=76.177957, fx=0.012831, 迭代20次
+2025-11-22 15:17:43,835 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=75.964581, fx=0.014023, 迭代19次
+2025-11-22 15:17:43,835 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=75.743405, fx=0.013542, 迭代20次
+2025-11-22 15:17:43,836 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=75.526432, fx=0.013648, 迭代20次
+2025-11-22 15:17:43,836 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=75.313581, fx=0.014332, 迭代20次
+2025-11-22 15:17:43,837 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=75.093785, fx=0.013494, 迭代21次
+2025-11-22 15:17:43,837 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=74.878384, fx=0.013286, 迭代21次
+2025-11-22 15:17:43,837 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=74.667291, fx=0.013699, 迭代21次
+2025-11-22 15:17:43,838 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=74.460420, fx=0.014722, 迭代21次
+2025-11-22 15:17:43,838 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=74.247550, fx=0.014395, 迭代22次
+2025-11-22 15:17:43,838 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=74.039151, fx=0.014728, 迭代22次
+2025-11-22 15:17:43,839 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=73.825412, fx=0.013830, 迭代23次
+2025-11-22 15:17:43,839 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=73.616375, fx=0.013641, 迭代23次
+2025-11-22 15:17:43,840 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=73.411938, fx=0.014146, 迭代23次
+2025-11-22 15:17:43,840 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=73.202909, fx=0.013562, 迭代24次
+2025-11-22 15:17:43,840 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=72.998689, fx=0.013717, 迭代24次
+2025-11-22 15:17:43,841 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=72.799165, fx=0.014598, 迭代24次
+2025-11-22 15:17:43,841 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=72.595755, fx=0.014525, 迭代25次
+2025-11-22 15:17:43,842 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=72.388955, fx=0.013589, 迭代26次
+2025-11-22 15:17:43,842 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=72.187325, fx=0.013475, 迭代26次
+2025-11-22 15:17:43,843 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=71.990736, fx=0.014166, 迭代26次
+2025-11-22 15:17:43,843 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=71.791394, fx=0.014122, 迭代27次
+2025-11-22 15:17:43,844 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=71.589768, fx=0.013430, 迭代28次
+2025-11-22 15:17:43,844 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=71.393586, fx=0.013630, 迭代28次
+2025-11-22 15:17:43,844 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=71.202700, fx=0.014700, 迭代28次
+2025-11-22 15:17:43,845 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=71.003211, fx=0.013860, 迭代30次
+2025-11-22 15:17:43,845 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=70.809506, fx=0.013990, 迭代30次
+2025-11-22 15:17:43,846 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=70.614934, fx=0.013757, 迭代31次
+2025-11-22 15:17:43,847 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=70.426198, fx=0.014517, 迭代31次
+2025-11-22 15:17:43,847 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=70.230920, fx=0.013768, 迭代33次
+2025-11-22 15:17:43,848 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=70.041891, fx=0.014099, 迭代33次
+2025-11-22 15:17:43,848 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=69.853192, fx=0.014316, 迭代34次
+2025-11-22 15:17:43,849 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=69.665191, fx=0.014493, 迭代35次
+2025-11-22 15:17:43,850 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=69.478241, fx=0.014703, 迭代36次
+2025-11-22 15:17:43,850 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=69.287525, fx=0.013960, 迭代38次
+2025-11-22 15:17:43,851 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=69.103865, fx=0.014485, 迭代38次
+2025-11-22 15:17:43,851 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=68.917441, fx=0.014262, 迭代40次
+2025-11-22 15:17:43,852 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=68.733693, fx=0.014413, 迭代41次
+2025-11-22 15:17:43,853 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=68.548476, fx=0.014081, 迭代43次
+2025-11-22 15:17:43,853 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=68.366812, fx=0.014310, 迭代44次
+2025-11-22 15:17:43,854 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=68.184875, fx=0.014305, 迭代46次
+2025-11-22 15:17:43,855 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=68.003402, fx=0.014221, 迭代48次
+2025-11-22 15:17:43,855 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=67.823099, fx=0.014207, 迭代50次
+2025-11-22 15:17:43,856 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=67.644632, fx=0.014404, 迭代52次
+2025-11-22 15:17:43,857 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=67.465305, fx=0.014246, 迭代55次
+2025-11-22 15:17:43,858 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=67.289378, fx=0.014633, 迭代57次
+2025-11-22 15:17:43,858 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=67.111440, fx=0.014423, 迭代61次
+2025-11-22 15:17:43,859 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.935816, fx=0.014530, 迭代64次
+2025-11-22 15:17:43,860 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.760808, fx=0.014596, 迭代68次
+2025-11-22 15:17:43,861 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.585340, fx=0.014391, 迭代73次
+2025-11-22 15:17:43,863 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.413459, fx=0.014780, 迭代77次
+2025-11-22 15:17:43,864 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.240013, fx=0.014662, 迭代84次
+2025-11-22 15:17:43,865 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=66.067550, fx=0.014583, 迭代91次
+2025-11-22 15:17:43,866 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.896658, fx=0.014670, 迭代99次
+2025-11-22 15:17:43,867 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.726784, fx=0.014804, 迭代109次
+2025-11-22 15:17:43,869 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.557017, fx=0.014791, 迭代122次
+2025-11-22 15:17:43,870 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.388060, fx=0.014781, 迭代138次
+2025-11-22 15:17:43,872 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.219899, fx=0.014774, 迭代159次
+2025-11-22 15:17:43,874 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=65.052320, fx=0.014726, 迭代188次
+2025-11-22 15:17:43,877 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.886206, fx=0.014832, 迭代229次
+2025-11-22 15:17:43,881 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.720282, fx=0.014813, 迭代296次
+2025-11-22 15:17:43,886 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.555326, fx=0.014844, 迭代417次
+2025-11-22 15:17:43,893 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=64.390909, fx=0.014831, 迭代711次
+2025-11-22 15:17:43,894 - DEBUG - [pmsm_fcc_calculator.py:1191] - 电流超限: Is=130.03 > IPmax=130.00
+2025-11-22 15:17:43,894 - INFO - [pmsm_fcc_calculator.py:1232] - 等转矩线计算完成，轨迹点数=101
+2025-11-22 15:17:43,894 - INFO - [pmsm_fcc_calculator.py:1110] - 开始计算等转矩线，目标转矩=18.56 N·m
+2025-11-22 15:17:43,895 - DEBUG - [pmsm_fcc_calculator.py:1121] - 非弱磁区上插值点: iq=103.78, id=-36.20
+2025-11-22 15:17:43,896 - DEBUG - [pmsm_fcc_calculator.py:1133] - 左端点在弱磁I区: iq=85.11, id=-98.26
+2025-11-22 15:17:43,898 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=103.888842, fx=0.018556, 迭代214次
+2025-11-22 15:17:43,899 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=103.663550, fx=0.017139, 迭代13次
+2025-11-22 15:17:43,899 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=103.440961, fx=0.016061, 迭代13次
+2025-11-22 15:17:43,900 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=103.239370, fx=0.018491, 迭代12次
+2025-11-22 15:17:43,900 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=103.021872, fx=0.018047, 迭代13次
+2025-11-22 15:17:43,900 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=102.806983, fx=0.017933, 迭代13次
+2025-11-22 15:17:43,901 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=102.594674, fx=0.018147, 迭代13次
+2025-11-22 15:17:43,901 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=102.367432, fx=0.015639, 迭代14次
+2025-11-22 15:17:43,901 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=102.160397, fx=0.016529, 迭代13次
+2025-11-22 15:17:43,902 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=101.955846, fx=0.017737, 迭代13次
+2025-11-22 15:17:43,902 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=101.736909, fx=0.016313, 迭代14次
+2025-11-22 15:17:43,902 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=101.537440, fx=0.018179, 迭代13次
+2025-11-22 15:17:43,902 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=101.323942, fx=0.017471, 迭代14次
+2025-11-22 15:17:43,903 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=101.113219, fx=0.017133, 迭代14次
+2025-11-22 15:17:43,903 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=100.905236, fx=0.017161, 迭代14次
+2025-11-22 15:17:43,903 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=100.699956, fx=0.017551, 迭代14次
+2025-11-22 15:17:43,903 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=100.497346, fx=0.018298, 迭代14次
+2025-11-22 15:17:43,904 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=100.281986, fx=0.016678, 迭代15次
+2025-11-22 15:17:43,904 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=100.084809, fx=0.018160, 迭代14次
+2025-11-22 15:17:43,904 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=99.875225, fx=0.017331, 迭代15次
+2025-11-22 15:17:43,904 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=99.668575, fx=0.016908, 迭代15次
+2025-11-22 15:17:43,905 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=99.464818, fx=0.016884, 迭代15次
+2025-11-22 15:17:43,905 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=99.263913, fx=0.017256, 迭代15次
+2025-11-22 15:17:43,905 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=99.065822, fx=0.018019, 迭代15次
+2025-11-22 15:17:43,906 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=98.856552, fx=0.016672, 迭代16次
+2025-11-22 15:17:43,906 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=98.664163, fx=0.018233, 迭代15次
+2025-11-22 15:17:43,906 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=98.460919, fx=0.017739, 迭代16次
+2025-11-22 15:17:43,907 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=98.260722, fx=0.017679, 迭代16次
+2025-11-22 15:17:43,907 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=98.063529, fx=0.018048, 迭代16次
+2025-11-22 15:17:43,907 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=97.856345, fx=0.016505, 迭代17次
+2025-11-22 15:17:43,908 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=97.665217, fx=0.017747, 迭代16次
+2025-11-22 15:17:43,909 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=97.464406, fx=0.017130, 迭代17次
+2025-11-22 15:17:43,909 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=97.266808, fx=0.016983, 迭代17次
+2025-11-22 15:17:43,909 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=97.072371, fx=0.017300, 迭代17次
+2025-11-22 15:17:43,909 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=96.881045, fx=0.018073, 迭代17次
+2025-11-22 15:17:43,910 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=96.681014, fx=0.017155, 迭代18次
+2025-11-22 15:17:43,910 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=96.484383, fx=0.016744, 迭代18次
+2025-11-22 15:17:43,910 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=96.291096, fx=0.016835, 迭代18次
+2025-11-22 15:17:43,911 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=96.101094, fx=0.017418, 迭代18次
+2025-11-22 15:17:43,911 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=95.914322, fx=0.018487, 迭代18次
+2025-11-22 15:17:43,911 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=95.719925, fx=0.018053, 迭代19次
+2025-11-22 15:17:43,913 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=95.529028, fx=0.018152, 迭代19次
+2025-11-22 15:17:43,913 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=95.331152, fx=0.016859, 迭代20次
+2025-11-22 15:17:43,914 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=95.147252, fx=0.018034, 迭代19次
+2025-11-22 15:17:43,914 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=94.956630, fx=0.017863, 迭代20次
+2025-11-22 15:17:43,915 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=94.769630, fx=0.018255, 迭代20次
+2025-11-22 15:17:43,915 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=94.576527, fx=0.017411, 迭代21次
+2025-11-22 15:17:43,915 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=94.387287, fx=0.017174, 迭代21次
+2025-11-22 15:17:43,916 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=94.201832, fx=0.017534, 迭代21次
+2025-11-22 15:17:43,916 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=94.020085, fx=0.018481, 迭代21次
+2025-11-22 15:17:43,917 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=93.833068, fx=0.018341, 迭代22次
+2025-11-22 15:17:43,917 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=93.641260, fx=0.017199, 迭代23次
+2025-11-22 15:17:43,917 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=93.462198, fx=0.018334, 迭代22次
+2025-11-22 15:17:43,918 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=93.278549, fx=0.018507, 迭代23次
+2025-11-22 15:17:43,918 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=93.090776, fx=0.017801, 迭代24次
+2025-11-22 15:17:43,918 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=92.907322, fx=0.017800, 迭代24次
+2025-11-22 15:17:43,919 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=92.728087, fx=0.018489, 迭代24次
+2025-11-22 15:17:43,919 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=92.545361, fx=0.018417, 迭代25次
+2025-11-22 15:17:43,920 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=92.359590, fx=0.017664, 迭代26次
+2025-11-22 15:17:43,920 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=92.178463, fx=0.017684, 迭代26次
+2025-11-22 15:17:43,921 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=92.001864, fx=0.018459, 迭代26次
+2025-11-22 15:17:43,921 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=91.815906, fx=0.017354, 迭代28次
+2025-11-22 15:17:43,922 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=91.641669, fx=0.018372, 迭代27次
+2025-11-22 15:17:43,922 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=91.458909, fx=0.017664, 迭代29次
+2025-11-22 15:17:43,923 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=91.281266, fx=0.017828, 迭代29次
+2025-11-22 15:17:43,923 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=91.102430, fx=0.017660, 迭代30次
+2025-11-22 15:17:43,924 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=90.928780, fx=0.018382, 迭代30次
+2025-11-22 15:17:43,924 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=90.748538, fx=0.017737, 迭代32次
+2025-11-22 15:17:43,925 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=90.573883, fx=0.018061, 迭代32次
+2025-11-22 15:17:43,926 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=90.399183, fx=0.018274, 迭代33次
+2025-11-22 15:17:43,927 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=90.224789, fx=0.018444, 迭代34次
+2025-11-22 15:17:43,927 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=90.045929, fx=0.017648, 迭代36次
+2025-11-22 15:17:43,928 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=89.873329, fx=0.017959, 迭代36次
+2025-11-22 15:17:43,928 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=89.702012, fx=0.018416, 迭代37次
+2025-11-22 15:17:43,929 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=89.527687, fx=0.018189, 迭代39次
+2025-11-22 15:17:43,930 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=89.355573, fx=0.018289, 迭代40次
+2025-11-22 15:17:43,930 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=89.181689, fx=0.017942, 迭代42次
+2025-11-22 15:17:43,931 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=89.010867, fx=0.018091, 迭代43次
+2025-11-22 15:17:43,932 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=88.839428, fx=0.018018, 迭代45次
+2025-11-22 15:17:43,933 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=88.668082, fx=0.017862, 迭代47次
+2025-11-22 15:17:43,933 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=88.501064, fx=0.018454, 迭代48次
+2025-11-22 15:17:43,934 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=88.331736, fx=0.018494, 迭代51次
+2025-11-22 15:17:43,935 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=88.161223, fx=0.018200, 迭代54次
+2025-11-22 15:17:43,936 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=87.993654, fx=0.018385, 迭代56次
+2025-11-22 15:17:43,936 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=87.823784, fx=0.018017, 迭代60次
+2025-11-22 15:17:43,937 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=87.658518, fx=0.018459, 迭代62次
+2025-11-22 15:17:43,938 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=87.490614, fx=0.018280, 迭代67次
+2025-11-22 15:17:43,939 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=87.324287, fx=0.018314, 迭代71次
+2025-11-22 15:17:43,940 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=87.158553, fx=0.018367, 迭代76次
+2025-11-22 15:17:43,941 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.992986, fx=0.018354, 迭代82次
+2025-11-22 15:17:43,942 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.827680, fx=0.018294, 迭代89次
+2025-11-22 15:17:43,943 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.663215, fx=0.018304, 迭代97次
+2025-11-22 15:17:43,945 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.499053, fx=0.018275, 迭代107次
+2025-11-22 15:17:43,946 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.335677, fx=0.018306, 迭代119次
+2025-11-22 15:17:43,948 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.173261, fx=0.018431, 迭代134次
+2025-11-22 15:17:43,949 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=86.011272, fx=0.018544, 迭代154次
+2025-11-22 15:17:43,951 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.848958, fx=0.018494, 迭代182次
+2025-11-22 15:17:43,954 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.687380, fx=0.018494, 迭代221次
+2025-11-22 15:17:43,957 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.526403, fx=0.018517, 迭代282次
+2025-11-22 15:17:43,962 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.365765, fx=0.018512, 迭代391次
+2025-11-22 15:17:43,968 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=85.205715, fx=0.018529, 迭代638次
+2025-11-22 15:17:43,968 - DEBUG - [pmsm_fcc_calculator.py:1191] - 电流超限: Is=130.06 > IPmax=130.00
+2025-11-22 15:17:43,968 - INFO - [pmsm_fcc_calculator.py:1232] - 等转矩线计算完成，轨迹点数=101
+2025-11-22 15:17:44,229 - INFO - [test_pmsm_fcc.py:796] - ✓ 等转矩线和等电压椭圆已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\equ_lines_and_circles.png
+
+2025-11-22 15:17:44,229 - INFO - [test_pmsm_fcc.py:650] - ======================================================================
+2025-11-22 15:17:44,229 - INFO - [test_pmsm_fcc.py:651] - 绘制非弱磁控制策略
+2025-11-22 15:17:44,229 - INFO - [test_pmsm_fcc.py:652] - ======================================================================
+2025-11-22 15:17:44,418 - INFO - [test_pmsm_fcc.py:697] - ✓ 非弱磁控制策略已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\非弱磁控制策略.png
+
+2025-11-22 15:17:44,419 - INFO - [test_pmsm_fcc.py:650] - ======================================================================
+2025-11-22 15:17:44,419 - INFO - [test_pmsm_fcc.py:651] - 绘制弱磁控制策略
+2025-11-22 15:17:44,419 - INFO - [test_pmsm_fcc.py:652] - ======================================================================
+2025-11-22 15:17:44,600 - INFO - [test_pmsm_fcc.py:697] - ✓ 弱磁控制策略已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\弱磁控制策略.png
+
+2025-11-22 15:17:44,600 - INFO - [test_pmsm_fcc.py:923] - ======================================================================
+2025-11-22 15:17:44,601 - INFO - [test_pmsm_fcc.py:924] - 测试给定工况点的轨迹绘制
+2025-11-22 15:17:44,601 - INFO - [test_pmsm_fcc.py:925] - ======================================================================
+2025-11-22 15:17:44,601 - INFO - [test_pmsm_fcc.py:811] - 准备测试用电机参数
+2025-11-22 15:17:44,601 - INFO - [test_pmsm_fcc.py:152] - 工况点测试: 使用机械转速 5000.0 rpm -> 电角速度 2094.40 rad/s
+2025-11-22 15:17:44,601 - INFO - [test_pmsm_fcc.py:816] - 测试工况点: Tem=4.00 N·m, We=2094.40 rad/s
+2025-11-22 15:17:44,601 - INFO - [pmsm_fcc_calculator.py:2025] - 绘制给定工况点的三条轨迹: Tem=4.00 N·m, We=2094.40 rad/s
+2025-11-22 15:17:44,602 - DEBUG - [pmsm_fcc_calculator.py:2028] - 步骤1: 获取完整电流容量边界
+2025-11-22 15:17:44,602 - DEBUG - [pmsm_fcc_calculator.py:2036] - IsTrack点数: 251
+2025-11-22 15:17:44,602 - DEBUG - [pmsm_fcc_calculator.py:2039] - 步骤2: 计算等转矩线 (Tem=4.00 N·m)
+2025-11-22 15:17:44,602 - INFO - [pmsm_fcc_calculator.py:1723] - 开始计算等转矩线，目标转矩=4.00 N·m
+2025-11-22 15:17:44,603 - DEBUG - [pmsm_fcc_calculator.py:1736] - 非弱磁区点: iq_nonFw=25.08 A, id_nonFw=-2.77 A
+2025-11-22 15:17:44,603 - DEBUG - [pmsm_fcc_calculator.py:1749] - 左端点在弱磁I区: iq=16.19 A, id=-128.99 A
+2025-11-22 15:17:44,604 - DEBUG - [pmsm_fcc_calculator.py:1758] - 选择id作为扫描变量, step=2.40 A
+2025-11-22 15:17:44,604 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=25.097333, fx=0.002597, 迭代48次
+2025-11-22 15:17:44,605 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.821262, fx=0.000602, 迭代12次
+2025-11-22 15:17:44,605 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.573050, fx=0.002051, 迭代11次
+2025-11-22 15:17:44,606 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.327319, fx=0.002949, 迭代11次
+2025-11-22 15:17:44,606 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=24.084046, fx=0.003331, 迭代11次
+2025-11-22 15:17:44,606 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.843205, fx=0.003216, 迭代11次
+2025-11-22 15:17:44,607 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.604773, fx=0.002624, 迭代11次
+2025-11-22 15:17:44,607 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.368726, fx=0.001575, 迭代11次
+2025-11-22 15:17:44,607 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=23.135038, fx=0.000091, 迭代11次
+2025-11-22 15:17:44,608 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.926823, fx=0.002223, 迭代10次
+2025-11-22 15:17:44,608 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.720482, fx=0.003960, 迭代10次
+2025-11-22 15:17:44,608 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.493277, fx=0.001283, 迭代11次
+2025-11-22 15:17:44,609 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.290837, fx=0.002264, 迭代10次
+2025-11-22 15:17:44,609 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=22.090220, fx=0.002875, 迭代10次
+2025-11-22 15:17:44,609 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.891408, fx=0.003120, 迭代10次
+2025-11-22 15:17:44,609 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.694385, fx=0.003006, 迭代10次
+2025-11-22 15:17:44,610 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.499136, fx=0.002547, 迭代10次
+2025-11-22 15:17:44,610 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.305643, fx=0.001756, 迭代10次
+2025-11-22 15:17:44,610 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=21.113893, fx=0.000646, 迭代10次
+2025-11-22 15:17:44,610 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.944982, fx=0.003249, 迭代9次
+2025-11-22 15:17:44,611 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.756477, fx=0.001523, 迭代10次
+2025-11-22 15:17:44,611 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.590425, fx=0.003525, 迭代9次
+2025-11-22 15:17:44,611 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.405111, fx=0.001212, 迭代10次
+2025-11-22 15:17:44,612 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.241870, fx=0.002640, 迭代9次
+2025-11-22 15:17:44,612 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=20.079935, fx=0.003792, 迭代9次
+2025-11-22 15:17:44,612 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.899216, fx=0.000651, 迭代10次
+2025-11-22 15:17:44,613 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.740022, fx=0.001270, 迭代9次
+2025-11-22 15:17:44,613 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.582102, fx=0.001630, 迭代9次
+2025-11-22 15:17:44,613 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.425445, fx=0.001737, 迭代9次
+2025-11-22 15:17:44,614 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.270042, fx=0.001595, 迭代9次
+2025-11-22 15:17:44,614 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=19.115881, fx=0.001209, 迭代9次
+2025-11-22 15:17:44,614 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.962954, fx=0.000583, 迭代9次
+2025-11-22 15:17:44,614 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.830213, fx=0.003739, 迭代8次
+2025-11-22 15:17:44,615 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.679572, fx=0.002644, 迭代9次
+2025-11-22 15:17:44,615 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.530135, fx=0.001322, 迭代9次
+2025-11-22 15:17:44,615 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.400424, fx=0.003796, 迭代8次
+2025-11-22 15:17:44,615 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.253221, fx=0.002035, 迭代9次
+2025-11-22 15:17:44,616 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=18.107195, fx=0.000063, 迭代9次
+2025-11-22 15:17:44,616 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.980445, fx=0.001901, 迭代8次
+2025-11-22 15:17:44,616 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.854582, fx=0.003536, 迭代8次
+2025-11-22 15:17:44,617 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.711745, fx=0.000954, 迭代9次
+2025-11-22 15:17:44,617 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.587763, fx=0.002192, 迭代8次
+2025-11-22 15:17:44,617 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.464648, fx=0.003234, 迭代8次
+2025-11-22 15:17:44,618 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.324931, fx=0.000062, 迭代9次
+2025-11-22 15:17:44,618 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.203657, fx=0.000710, 迭代8次
+2025-11-22 15:17:44,618 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=17.083231, fx=0.001168, 迭代8次
+2025-11-22 15:17:44,618 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.963648, fx=0.001442, 迭代8次
+2025-11-22 15:17:44,619 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.844903, fx=0.001542, 迭代8次
+2025-11-22 15:17:44,619 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.726989, fx=0.001473, 迭代8次
+2025-11-22 15:17:44,619 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.609900, fx=0.001231, 迭代8次
+2025-11-22 15:17:44,619 - DEBUG - [pmsm_fcc_calculator.py:411] - 搜索收敛: x=16.493630, fx=0.000809, 迭代8次
+2025-11-22 15:17:44,619 - INFO - [pmsm_fcc_calculator.py:1852] - 等转矩线计算完成，轨迹点数=52
+2025-11-22 15:17:44,620 - DEBUG - [pmsm_fcc_calculator.py:2047] - 等转矩线点数: 52
+2025-11-22 15:17:44,620 - DEBUG - [pmsm_fcc_calculator.py:2050] - 步骤3: 计算等电压椭圆 (We=2094.40 rad/s)
+2025-11-22 15:17:44,620 - INFO - [pmsm_fcc_calculator.py:1873] - 开始计算等电压椭圆，转速=2094.40 rad/s
+2025-11-22 15:17:44,620 - DEBUG - [pmsm_fcc_calculator.py:1888] - 非弱磁区末端最大转速=1286.29 rad/s
+2025-11-22 15:17:44,620 - DEBUG - [pmsm_fcc_calculator.py:1889] - 非弱磁区起点最大转速=1583.43 rad/s
+2025-11-22 15:17:44,620 - DEBUG - [pmsm_fcc_calculator.py:1910] - 起点在非弱磁区轨迹外侧
+2025-11-22 15:17:44,621 - DEBUG - [pmsm_fcc_calculator.py:1915] - 计算得到id_start=-64.13
+2025-11-22 15:17:44,621 - DEBUG - [pmsm_fcc_calculator.py:1923] - 弱磁I区终点最大转速=3143.36 rad/s
+2025-11-22 15:17:44,621 - DEBUG - [pmsm_fcc_calculator.py:1927] - 终点在弱磁I区
+2025-11-22 15:17:44,621 - DEBUG - [pmsm_fcc_calculator.py:1931] - 插值得到终点: id=-114.62, iq=61.34
+2025-11-22 15:17:44,622 - DEBUG - [pmsm_fcc_calculator.py:1944] - 无法计算iq_max，设置为0
+2025-11-22 15:17:44,622 - DEBUG - [pmsm_fcc_calculator.py:1953] - iq扫描阈值=0.00
+2025-11-22 15:17:44,622 - DEBUG - [pmsm_fcc_calculator.py:1957] - 执行第一段计算: iq从0.00到0.00
+2025-11-22 15:17:44,623 - DEBUG - [pmsm_fcc_calculator.py:1982] - 执行第二段计算: id从-64.13到-114.62
+2025-11-22 15:17:44,629 - INFO - [pmsm_fcc_calculator.py:2002] - 等电压椭圆计算完成，轨迹点数=100, 最大转矩=14.26 N·m
+2025-11-22 15:17:44,630 - DEBUG - [pmsm_fcc_calculator.py:2058] - 等电压椭圆点数: 100, 最大转矩: 14.26 N·m
+2025-11-22 15:17:44,630 - INFO - [pmsm_fcc_calculator.py:2060] - 给定工况点的三条轨迹计算完成
+2025-11-22 15:17:44,630 - INFO - [test_pmsm_fcc.py:829] - IsTrack点数: 251
+2025-11-22 15:17:44,630 - INFO - [test_pmsm_fcc.py:830] - 等转矩线点数: 52
+2025-11-22 15:17:44,630 - INFO - [test_pmsm_fcc.py:831] - 等电压椭圆点数: 100
+2025-11-22 15:17:44,842 - INFO - [test_pmsm_fcc.py:871] - ✓ 给定工况点轨迹已保存到 g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results\operating_point_tracks.png
+
+2025-11-22 15:17:44,843 - INFO - [test_pmsm_fcc.py:929] - 
+======================================================================
+2025-11-22 15:17:44,843 - INFO - [test_pmsm_fcc.py:930] - 所有测试完成！
+2025-11-22 15:17:44,843 - INFO - [test_pmsm_fcc.py:931] - ======================================================================
+2025-11-22 15:17:44,843 - INFO - [test_pmsm_fcc.py:932] - 测试结果保存在: g:\Easimotor\WorkingFolder\SoftwareFunctionDesign\103_FiledCoupleClass\ExternalValidation\example2\test_results/
+2025-11-22 15:17:44,843 - INFO - [test_pmsm_fcc.py:933] - 
+图表文件:
+2025-11-22 15:17:44,844 - INFO - [test_pmsm_fcc.py:934] -   - motor_characteristics.png
+2025-11-22 15:17:44,844 - INFO - [test_pmsm_fcc.py:935] -   - nonFw_track.png
+2025-11-22 15:17:44,845 - INFO - [test_pmsm_fcc.py:936] -   - current_range.png
+2025-11-22 15:17:44,845 - INFO - [test_pmsm_fcc.py:937] -   - equ_lines_and_circles.png
+2025-11-22 15:17:44,845 - INFO - [test_pmsm_fcc.py:938] -   - 非弱磁控制策略.png
+2025-11-22 15:17:44,845 - INFO - [test_pmsm_fcc.py:939] -   - 弱磁控制策略.png
+2025-11-22 15:17:44,845 - INFO - [test_pmsm_fcc.py:940] -   - operating_point_tracks.png
+2025-11-22 15:17:44,845 - INFO - [test_pmsm_fcc.py:941] - 
+日志文件:
+2025-11-22 15:17:44,846 - INFO - [test_pmsm_fcc.py:942] -   - test_log.txt
+2025-11-22 15:17:44,846 - INFO - [test_pmsm_fcc.py:943] - ======================================================================
+

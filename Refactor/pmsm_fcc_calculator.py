@@ -118,7 +118,7 @@ class PMSMFieldCoupledCalculator:
         constWePointsAtNonFW: int = 100,
         constTemPointsAtFW: int = 200,
         constWePointsAtFW: int = 200,
-        IsSmoothInterp: bool = False,
+        IsSmoothInterp: bool = True,
         logger: Optional[logging.Logger] = None
     ):
         """
@@ -463,7 +463,7 @@ class PMSMFieldCoupledCalculator:
         
         for i in range(maxIter):
             if abs(step) < tol * abs(b - a):
-                self.logger.debug(f"极值搜索收敛: x={lastX:.6f}, f(x)={lastFx:.6f}")
+                # self.logger.debug(f"极值搜索收敛: x={lastX:.6f}, f(x)={lastFx:.6f}")
                 return lastX, lastFx, i + 1, True
             
             x_new = lastX + step
@@ -542,7 +542,8 @@ class PMSMFieldCoupledCalculator:
                 divisions=self.deMagidPoints,
                 startFrom='right',
                 target=0,
-                tol=1e-5
+                tol=1e-4,
+                maxIter=1000
             )
             return True, id_demag
         else:
@@ -714,7 +715,7 @@ class PMSMFieldCoupledCalculator:
                 return False, "Unknown root param", 0.0
             
             if abs(id_new - id) / (abs(id) + 1e-8) < tol:
-                self.logger.debug(f"id计算收敛: id={id_new:.4f}, 迭代{i+1}次")
+                # self.logger.debug(f"id计算收敛: id={id_new:.4f}, 迭代{i+1}次")
                 return True, "", id_new
             
             damping = 0.5
@@ -765,7 +766,7 @@ class PMSMFieldCoupledCalculator:
             iq_new = (-b + np.sqrt(delta)) / (2 * a)
             
             if abs(iq_new - iq)/max(abs(iq), 1e-8) < tol:
-                self.logger.debug(f"iq计算收敛: iq={iq_new:.4f}, 迭代{i+1}次")
+                # self.logger.debug(f"iq计算收敛: iq={iq_new:.4f}, 迭代{i+1}次")
                 return True, "", iq_new
             
             damping = 0.5
@@ -804,9 +805,11 @@ class PMSMFieldCoupledCalculator:
             divisions=divisions,
             startFrom='right',
             target=0,
-            tol=tol,
+            tol=tol*Tem_target,
             maxIter=maxIter
         )
+        if not converged or iterations >= maxIter:
+            self.logger.warning(f"id计算未收敛:id当前值={id}, id_min={id_min}, id_init={id_init}, Tem_target={Tem_target}")
         return id
     
     def _calc_iq_by_Tem_id(
@@ -839,12 +842,15 @@ class PMSMFieldCoupledCalculator:
             divisions=divisions,
             startFrom='right',
             target=0,
-            tol=tol,
+            tol=tol*Tem_target,
             maxIter=maxIter
         )
         if not converged or iterations >= maxIter:
             self.logger.warning(f"iq计算未收敛:iq当前值={iq}, iq_min={iq_min}, iq_init={iq_init}, Tem_target={Tem_target}")
-        return iq
+            # 返回iq_init
+            return iq_init
+        else:
+            return iq
     
     # ========================================
     # 第三部分：控制策略轨迹计算（公开）
@@ -1134,10 +1140,10 @@ class PMSMFieldCoupledCalculator:
             
             if id_diff >= iq_diff:
                 scan_by_id = True
-                id_step = (id_nonFw - id_fw1 * 0.95) / self.equTemPoints
+                id_step = (id_nonFw - id_fw1) / self.equTemPoints
             else:
                 scan_by_id = False
-                iq_step = (iq_nonFw - iq_fw1 * 0.95) / self.equTemPoints
+                iq_step = (iq_nonFw - iq_fw1) / self.equTemPoints
         else:
             minTemAtMtpv = mtpvTrack[-1, 3]
             minidAtMtpv = mtpvTrack[-1, 1]
@@ -1160,10 +1166,11 @@ class PMSMFieldCoupledCalculator:
             
             if id_diff >= iq_diff:
                 scan_by_id = True
-                id_step = (id_nonFw - id_mtpv * 0.95) / self.equTemPoints
+                id_step = (id_nonFw - id_mtpv) / self.equTemPoints
             else:
                 scan_by_id = False
-                iq_step = (iq_nonFw - iq_mtpv * 0.95) / self.equTemPoints
+                iq_step = (iq_nonFw - iq_mtpv) / self.equTemPoints
+
         
         equTemTrack = []
         
@@ -1195,17 +1202,17 @@ class PMSMFieldCoupledCalculator:
                 equTemTrack.append([iq, id, Is, Tem, We])
                 iq_init = iq
         else:
-            id_init = id_nonFw * 1.05
+            id_init = id_nonFw * 0.95
             
             for i in range(self.equTemPoints + 1):
                 iq = iq_nonFw - i * iq_step
-                id = self._calc_id_by_Tem_iq(Tem_target=Tem_target, iq=iq, id_min=lastPoint[1], id_init=id_init)
+                id = self._calc_id_by_Tem_iq(Tem_target=Tem_target, iq=iq, id_min=lastPoint[1], id_init=id_init, tol=1e-3)
                 
                 if id > -1e-6:
                     break
                 
                 Tem = self._calc_Tem(id, iq)
-                if abs(Tem - Tem_target)/Tem_target > 1e-2:
+                if abs(Tem - Tem_target)/Tem_target > 1e-3:
                     self.logger.warning(f"转矩误差过大: 计算={Tem:.2f}, 目标={Tem_target:.2f}")
                 
                 Is = np.sqrt(id**2 + iq**2)
